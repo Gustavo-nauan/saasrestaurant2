@@ -1,0 +1,252 @@
+/* =====================================================================
+   inicio.css  |  FASE 2  |  Tela de início (mural estilo streaming)
+   Depende de: tokens.css, base.css, componentes.css
+   ===================================================================== */
+
+.inicio {
+  position: relative;
+  display: flex;
+  min-height: 100vh;
+  min-height: 100dvh;
+  /* Corta o mural que sai da tela: garante ZERO rolagem horizontal. */
+  overflow: hidden;
+  background: var(--cor-escuro);
+  color: var(--cor-texto-sobre-escuro);
+}
+
+/* ---------------------------------------------------------------------
+   MURAL
+   Estrutura: .mural (borra + escala) > .mural-rotacao (inclina) >
+   .mural-coluna (recorta) > .mural-trilha (anima) > .tile
+   --------------------------------------------------------------------- */
+.mural {
+  position: absolute;
+  inset: 0;
+  /* scale(1.15) empurra as bordas esfumaçadas do blur para fora da tela. */
+  filter: blur(4px);
+  transform: scale(1.15);
+  pointer-events: none;
+}
+
+.mural-rotacao {
+  position: absolute;
+  /* 140% + deslocamento negativo: mesmo girado -8deg, cobre os cantos. */
+  top: -20%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+  display: flex;
+  gap: var(--esp-2);
+  transform: rotate(-8deg);
+}
+
+.mural-coluna {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Celular: 3 colunas. As demais nem carregam imagens (display:none +
+   loading="lazy"), economizando dados móveis. */
+.mural-coluna:nth-child(n + 4) {
+  display: none;
+}
+
+/* Cada coluna começa em um ponto diferente do loop (atraso negativo) e
+   algumas rolam no sentido contrário: efeito de "parede de pôsteres". */
+.mural-trilha {
+  display: flex;
+  flex-direction: column;
+  animation: mural-rolar var(--duracao, 80s) linear infinite;
+  animation-delay: var(--atraso, 0s);
+  will-change: transform;
+}
+
+.mural-coluna:nth-child(1) { --duracao: 85s; --atraso: -10s; }
+.mural-coluna:nth-child(2) { --duracao: 95s; --atraso: -40s; margin-top: var(--esp-10); }
+.mural-coluna:nth-child(3) { --duracao: 75s; --atraso: -25s; }
+.mural-coluna:nth-child(4) { --duracao: 100s; --atraso: -55s; margin-top: var(--esp-10); }
+.mural-coluna:nth-child(5) { --duracao: 90s; --atraso: -5s; }
+.mural-coluna:nth-child(6) { --duracao: 80s; --atraso: -35s; margin-top: var(--esp-10); }
+
+.mural-coluna:nth-child(even) .mural-trilha {
+  animation-direction: reverse;
+}
+
+/* A trilha tem a lista duplicada: andar -50% termina exatamente onde
+   começou, então o loop não tem "pulo". */
+@keyframes mural-rolar {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+
+.tile {
+  flex-shrink: 0;
+  /* 4/5: mais baixo que antes (3/4) -> cabem mais fotos na tela. */
+  aspect-ratio: 4 / 5;
+  /* margin (e não gap) para que o 50% do loop seja exato. */
+  margin-bottom: var(--esp-2);
+  overflow: hidden;
+  border-radius: var(--raio-md);
+  /* Reserva: se a foto faltar, o degradê quente aparece no lugar. */
+  background-color: var(--cor-primaria);
+}
+
+.tile-g0 { background-image: linear-gradient(135deg, var(--cor-primaria), var(--cor-destaque)); }
+.tile-g1 { background-image: linear-gradient(160deg, var(--cor-destaque), var(--cor-primaria-hover)); }
+.tile-g2 { background-image: linear-gradient(120deg, var(--cor-primaria-hover), var(--cor-escuro)); }
+.tile-g3 { background-image: linear-gradient(200deg, var(--cor-destaque), var(--cor-escuro)); }
+
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------------------------------------------------------------------
+   VÉU: leve no topo (fotos bem visíveis) e forte de 50% para baixo, onde
+   está o texto. 80% de opacidade atrás do texto mantém o subtítulo
+   acima de 4,5:1 mesmo sobre a foto mais clara possível. + vinheta.
+   --------------------------------------------------------------------- */
+.inicio-veu {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, transparent 40%, color-mix(in srgb, var(--cor-escuro) 60%, transparent) 100%),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--cor-escuro) 25%, transparent) 0%,
+      color-mix(in srgb, var(--cor-escuro) 55%, transparent) 25%,
+      color-mix(in srgb, var(--cor-escuro) 80%, transparent) 50%,
+      color-mix(in srgb, var(--cor-escuro) 92%, transparent) 100%
+    );
+}
+
+/* ---------------------------------------------------------------------
+   CONTEÚDO CENTRAL
+   --------------------------------------------------------------------- */
+.inicio-conteudo {
+  position: relative;
+  z-index: var(--z-base);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 720px;
+  margin-inline: auto;
+  padding: var(--esp-9) var(--container-pad);
+  text-align: center;
+}
+
+.inicio-marca {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+  margin-bottom: var(--esp-6);
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-xl);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--cor-texto-sobre-escuro);
+}
+
+.inicio-marca::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--cor-primaria);
+  box-shadow: 4px -3px 0 -2px var(--cor-sucesso);
+}
+
+.inicio-titulo {
+  color: var(--cor-superficie);
+  /* Sombra sutil reforça a leitura sobre as fotos mais claras. */
+  text-shadow: 0 2px 24px color-mix(in srgb, var(--cor-escuro) 80%, transparent);
+}
+
+.inicio-subtitulo {
+  max-width: 34ch;
+  margin-top: var(--esp-4);
+  font-size: var(--texto-lg);
+  color: var(--cor-texto-suave-sobre-escuro);
+}
+
+.inicio-acoes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-4);
+  width: 100%;
+  margin-top: var(--esp-8);
+}
+
+/* Celular: botão ocupa a largura toda (alvo de toque generoso). */
+.inicio-acoes .btn-grande {
+  width: 100%;
+  max-width: 360px;
+}
+
+.inicio-acoes .btn-grande svg {
+  transition: transform var(--transicao);
+}
+
+.inicio-acoes .btn-grande:hover svg {
+  transform: translateX(4px);
+}
+
+#btn-pedido-icone {
+  display: inline-flex;
+}
+
+/* ---------------------------------------------------------------------
+   ENTRADA SUAVE: fade + subida de 12px, em cascata
+   --------------------------------------------------------------------- */
+.entrada {
+  animation: entrada-subir 700ms ease both;
+}
+
+.inicio-marca    { animation-delay: 100ms; }
+.inicio-titulo   { animation-delay: 220ms; }
+.inicio-subtitulo{ animation-delay: 340ms; }
+.inicio-acoes    { animation-delay: 460ms; }
+
+@keyframes entrada-subir {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------------------------------------------------------------------
+   TABLET (>= 768px): 4 colunas
+   --------------------------------------------------------------------- */
+@media (min-width: 768px) {
+  .mural-coluna:nth-child(4) { display: block; }
+
+  .inicio-acoes .btn-grande {
+    width: auto;
+    min-width: 280px;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   DESKTOP (>= 1280px): 6 colunas
+   --------------------------------------------------------------------- */
+@media (min-width: 1280px) {
+  .mural-coluna:nth-child(n + 5) { display: block; }
+}
+
+/* Sem movimento: mural parado (o reset global não basta: ele faria o
+   loop "pular" para o fim). */
+@media (prefers-reduced-motion: reduce) {
+  .mural-trilha {
+    animation: none !important;
+  }
+
+  .entrada {
+    animation: none !important;
+    opacity: 1;
+  }
+}

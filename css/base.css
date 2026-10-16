@@ -1,0 +1,136 @@
+/* =====================================================================
+   base.css  |  FASE 2  |  Reset, tipografia base e utilitários
+   Depende de: tokens.css (carregar antes)
+   ===================================================================== */
+
+/* Reset moderno: box-sizing previsível e sem margens "surpresa". */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  /* Impede o iOS de reescalar o texto ao girar o aparelho. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh; /* dvh evita o "pulo" da barra de endereço no celular */
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: var(--fonte-corpo);
+  font-size: var(--texto-base);
+  font-weight: 400;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  /* Quebra de linha equilibrada: títulos grandes não ficam com órfã. */
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--texto-4xl); }
+h2 { font-size: var(--texto-3xl); }
+h3 { font-size: var(--texto-xl); font-weight: 600; }
+h4 { font-size: var(--texto-lg); font-weight: 600; }
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--cor-primaria-texto);
+  text-underline-offset: 3px;
+}
+
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Foco visível em tudo que é clicável.
+   Anel mostarda (identidade) + halo escuro externo: a mostarda sozinha
+   tem só ~2:1 contra fundo claro; o halo garante contraste de 3:1+ tanto
+   em fundo claro quanto escuro. */
+:focus-visible {
+  outline: 3px solid var(--cor-destaque);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px var(--cor-escuro);
+}
+
+/* Só esconde o contorno padrão quando NÃO é navegação por teclado. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Visível apenas para leitores de tela. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Largura máxima de 1100px com respiro lateral que cresce com a tela. */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+/* Respeita quem pede menos movimento (vestibular, enxaqueca etc.):
+   desliga animações e transições em todo o site. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

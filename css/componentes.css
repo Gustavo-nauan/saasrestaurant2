@@ -1,0 +1,733 @@
+/* =====================================================================
+   componentes.css  |  FASE 2  |  Biblioteca de componentes
+   Depende de: tokens.css e base.css.
+   REGRA: nenhum valor de cor/espaço/raio literal aqui — só var(--...).
+   (Exceções: 0, 1px/2px de bordas, 100%, e medidas estruturais de layout.)
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   TEMA ESCURO (container)
+   As variáveis do tema estão em tokens.css. Aqui só aplicamos fundo e
+   texto no container, para que QUALQUER bloco vire "cozinha" com
+   class="tema-escuro".
+   --------------------------------------------------------------------- */
+.tema-escuro {
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+/* ---------------------------------------------------------------------
+   BOTÕES
+   min-height 44px = alvo de toque mínimo recomendado (WCAG 2.5.5).
+   Peso 600 deixa o texto branco sobre tomate legível (tratado como
+   "texto em negrito").
+   --------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  min-height: var(--alvo-toque);
+  padding: var(--esp-2) var(--esp-5);
+  border: 2px solid transparent;
+  border-radius: var(--raio-pill);
+  background: transparent;
+  color: var(--cor-texto);
+  font-family: var(--fonte-corpo);
+  font-size: var(--texto-base);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--transicao-rapida),
+    border-color var(--transicao-rapida),
+    color var(--transicao-rapida),
+    box-shadow var(--transicao-rapida),
+    transform var(--transicao-rapida);
+}
+
+.btn:active:not(:disabled):not([aria-disabled="true"]) {
+  transform: scale(0.97);
+}
+
+.btn-primario {
+  background: var(--cor-primaria);
+  border-color: var(--cor-primaria);
+  color: var(--cor-sobre-primaria);
+  box-shadow: var(--sombra-sm);
+}
+
+.btn-primario:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--cor-primaria-hover);
+  border-color: var(--cor-primaria-hover);
+  box-shadow: var(--sombra-md);
+}
+
+.btn-secundario {
+  --spinner-cor: var(--cor-primaria-texto);
+  background: transparent;
+  border-color: var(--cor-primaria-texto);
+  color: var(--cor-primaria-texto);
+}
+
+.btn-secundario:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--cor-primaria-suave);
+}
+
+.btn-fantasma {
+  --spinner-cor: var(--cor-texto);
+  color: var(--cor-texto);
+}
+
+.btn-fantasma:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--cor-primaria-suave);
+}
+
+.btn-grande {
+  min-height: 56px;
+  padding: var(--esp-4) var(--esp-8);
+  font-size: var(--texto-lg);
+}
+
+.btn-bloco {
+  display: flex;
+  width: 100%;
+}
+
+/* Botão só com ícone (fechar, voltar...). Quadrado de 44px. */
+.btn-icone {
+  width: var(--alvo-toque);
+  height: var(--alvo-toque);
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Carregando: esconde o texto (mantendo a largura, sem "pulo" de layout)
+   e mostra um spinner por cima. */
+.btn-carregando {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+}
+
+.btn-carregando::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 1.25em;
+  height: 1.25em;
+  border: 2px solid var(--spinner-cor, var(--cor-sobre-primaria));
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: girar 0.7s linear infinite;
+}
+
+/* ---------------------------------------------------------------------
+   SPINNER
+   --------------------------------------------------------------------- */
+.spinner {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--cor-borda);
+  border-top-color: var(--cor-primaria);
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------------------------------------------------------------------
+   CAMPOS DE FORMULÁRIO
+   Fonte >= 16px e altura de 48px: confortável no polegar e sem zoom no iOS.
+   Estrutura:
+   <div class="campo [campo-erro]">
+     <label for="x">Rótulo</label>
+     <input id="x" aria-describedby="x-ajuda">
+     <p class="campo-ajuda" id="x-ajuda">...</p>
+     <p class="campo-mensagem-erro" id="x-erro">...</p>
+   </div>
+   --------------------------------------------------------------------- */
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.campo label {
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+.campo input,
+.campo textarea,
+.campo select {
+  width: 100%;
+  min-height: 48px;
+  padding: var(--esp-3) var(--esp-4);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  border: 2px solid var(--cor-borda-campo);
+  border-radius: var(--raio-md);
+  font-size: var(--texto-base);
+  transition:
+    border-color var(--transicao-rapida),
+    box-shadow var(--transicao-rapida);
+}
+
+.campo textarea {
+  min-height: 112px;
+  resize: vertical;
+}
+
+.campo input::placeholder,
+.campo textarea::placeholder {
+  color: var(--cor-texto-suave);
+  opacity: 0.8;
+}
+
+.campo input:hover,
+.campo textarea:hover {
+  border-color: var(--cor-texto-suave);
+}
+
+.campo input:focus-visible,
+.campo textarea:focus-visible,
+.campo select:focus-visible {
+  border-color: var(--cor-destaque);
+}
+
+.campo input:disabled,
+.campo textarea:disabled {
+  background: var(--cor-borda);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.campo-ajuda {
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
+
+.campo-mensagem-erro {
+  display: none;
+  align-items: center;
+  gap: var(--esp-1);
+  font-size: var(--texto-sm);
+  font-weight: 500;
+  color: var(--cor-erro);
+}
+
+.campo-erro input,
+.campo-erro textarea {
+  border-color: var(--cor-erro);
+}
+
+.campo-erro .campo-mensagem-erro {
+  display: flex;
+}
+
+.tema-escuro .campo-mensagem-erro {
+  /* Vermelho erro puro sobre marrom escuro é fraco; usa tom do status. */
+  color: var(--status-cancelado-texto);
+}
+
+/* ---------------------------------------------------------------------
+   CARD DE PRODUTO
+   Layout horizontal (texto à esquerda, foto à direita) — padrão de
+   cardápio no celular: lista densa e fácil de varrer com o olhar.
+   --------------------------------------------------------------------- */
+.card-produto {
+  display: grid;
+  grid-template-columns: 1fr 104px;
+  grid-template-areas:
+    "corpo imagem"
+    "rodape imagem";
+  gap: var(--esp-2) var(--esp-4);
+  padding: var(--esp-4);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+  transition: box-shadow var(--transicao), transform var(--transicao);
+}
+
+.card-produto:hover {
+  box-shadow: var(--sombra-md);
+  transform: translateY(-2px);
+}
+
+.card-produto-imagem {
+  grid-area: imagem;
+  align-self: start;
+  width: 104px;
+  height: 104px;
+  overflow: hidden;
+  border-radius: var(--raio-md);
+  /* Degradê quente aparece enquanto a foto carrega ou se ela faltar. */
+  background: linear-gradient(135deg, var(--cor-destaque-suave), var(--cor-primaria-suave));
+}
+
+.card-produto-imagem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-produto-corpo {
+  grid-area: corpo;
+  min-width: 0;
+}
+
+.card-produto-nome {
+  font-size: var(--texto-lg);
+  font-weight: 600;
+}
+
+.card-produto-descricao {
+  margin-top: var(--esp-1);
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+  /* No máximo 2 linhas: cards com altura estável. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-produto-rodape {
+  grid-area: rodape;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+}
+
+.card-produto-preco {
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-lg);
+  font-weight: 700;
+}
+
+.card-produto-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--alvo-toque);
+  height: var(--alvo-toque);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--cor-primaria);
+  color: var(--cor-sobre-primaria);
+  box-shadow: var(--sombra-sm);
+  transition: background-color var(--transicao-rapida), transform var(--transicao-rapida);
+}
+
+.card-produto-add:hover {
+  background: var(--cor-primaria-hover);
+}
+
+.card-produto-add:active {
+  transform: scale(0.92);
+}
+
+/* ---------------------------------------------------------------------
+   BADGE DE STATUS (uma variante por status do pedido)
+   O ponto colorido + texto: o status nunca depende só da cor
+   (daltonismo) — o rótulo escrito sempre acompanha.
+   --------------------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: var(--esp-1) var(--esp-3);
+  border-radius: var(--raio-pill);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  background: var(--cor-borda);
+  color: var(--cor-texto);
+}
+
+.badge::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--badge-ponto, currentColor);
+}
+
+.badge-recebido    { --badge-ponto: var(--status-recebido);    background: var(--status-recebido-suave);    color: var(--status-recebido-texto); }
+.badge-preparo     { --badge-ponto: var(--status-preparo);     background: var(--status-preparo-suave);     color: var(--status-preparo-texto); }
+.badge-pronto      { --badge-ponto: var(--status-pronto);      background: var(--status-pronto-suave);      color: var(--status-pronto-texto); }
+.badge-finalizado  { --badge-ponto: var(--status-finalizado);  background: var(--status-finalizado-suave);  color: var(--status-finalizado-texto); }
+.badge-cancelado   { --badge-ponto: var(--status-cancelado);   background: var(--status-cancelado-suave);   color: var(--status-cancelado-texto); }
+
+/* ---------------------------------------------------------------------
+   CHIPS / ABAS DE CATEGORIA
+   --------------------------------------------------------------------- */
+.chips {
+  display: flex;
+  gap: var(--esp-2);
+  overflow-x: auto;
+  padding-block: var(--esp-1);
+  /* Esconde a barra de rolagem; o arraste com o dedo continua. */
+  scrollbar-width: none;
+}
+
+.chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-height: var(--alvo-toque);
+  padding: var(--esp-2) var(--esp-5);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  border: 2px solid var(--cor-borda);
+  border-radius: var(--raio-pill);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    background-color var(--transicao-rapida),
+    border-color var(--transicao-rapida),
+    color var(--transicao-rapida);
+}
+
+.chip:hover {
+  border-color: var(--cor-primaria-texto);
+}
+
+.chip-ativo,
+.chip[aria-selected="true"] {
+  background: var(--cor-primaria);
+  border-color: var(--cor-primaria);
+  color: var(--cor-sobre-primaria);
+}
+
+/* ---------------------------------------------------------------------
+   MODAL e BOTTOM-SHEET
+   .sobreposicao = fundo escurecido (alterne a classe .aberto).
+   .modal  = caixa centralizada (decisões rápidas).
+   .sheet  = painel que sobe de baixo (padrão mobile, alcance do polegar).
+   --------------------------------------------------------------------- */
+.sobreposicao {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--esp-4);
+  background: color-mix(in srgb, var(--cor-escuro) 62%, transparent);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transicao), visibility var(--transicao);
+}
+
+.sobreposicao.aberto {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal,
+.sheet {
+  width: 100%;
+  max-height: 90vh;
+  max-height: 90dvh;
+  overflow-y: auto;
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  box-shadow: var(--sombra-lg);
+  padding: var(--esp-6);
+  transition: transform var(--transicao);
+}
+
+.modal {
+  max-width: 480px;
+  border-radius: var(--raio-lg);
+  transform: translateY(12px) scale(0.98);
+}
+
+.sobreposicao-sheet {
+  align-items: flex-end;
+  padding: 0;
+}
+
+.sheet {
+  max-width: 640px;
+  border-radius: var(--raio-lg) var(--raio-lg) 0 0;
+  transform: translateY(100%);
+}
+
+.sobreposicao.aberto .modal,
+.sobreposicao.aberto .sheet {
+  transform: none;
+}
+
+/* Alça visual do sheet: sinaliza que é arrastável/descartável. */
+.sheet::before {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 4px;
+  margin: calc(var(--esp-2) * -1) auto var(--esp-4);
+  border-radius: var(--raio-pill);
+  background: var(--cor-borda);
+}
+
+.modal-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  margin-bottom: var(--esp-4);
+}
+
+.modal-topo h2,
+.modal-topo h3 {
+  font-size: var(--texto-xl);
+}
+
+.modal-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-3);
+  margin-top: var(--esp-6);
+}
+
+/* Variante só para pré-visualizar na página de desenvolvimento. */
+.sobreposicao-estatica {
+  position: relative;
+  inset: auto;
+  z-index: auto;
+  opacity: 1;
+  visibility: visible;
+  border-radius: var(--raio-lg);
+  min-height: 280px;
+}
+
+.sobreposicao-estatica .modal,
+.sobreposicao-estatica .sheet {
+  transform: none;
+}
+
+/* ---------------------------------------------------------------------
+   TOAST
+   Container fixo no rodapé; aria-live fica no próprio toast (utils.js).
+   Sempre escuro: contraste forte em qualquer tela, claro ou escuro.
+   --------------------------------------------------------------------- */
+.toasts {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: var(--esp-4);
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-2);
+  padding-inline: var(--esp-4);
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  width: 100%;
+  max-width: 420px;
+  padding: var(--esp-3) var(--esp-4);
+  background: var(--cor-escuro);
+  color: var(--cor-texto-sobre-escuro);
+  border-left: 4px solid var(--toast-cor, var(--cor-destaque));
+  border-radius: var(--raio-md);
+  box-shadow: var(--sombra-lg);
+  font-size: var(--texto-sm);
+  font-weight: 500;
+  pointer-events: auto;
+  animation: toast-entrar var(--transicao) both;
+}
+
+.toast svg {
+  flex-shrink: 0;
+  color: var(--toast-cor, var(--cor-destaque));
+}
+
+.toast-sucesso { --toast-cor: var(--cor-sucesso); }
+.toast-erro    { --toast-cor: var(--status-cancelado-texto); }
+.toast-info    { --toast-cor: var(--cor-destaque); }
+
+.toast-saindo {
+  animation: toast-sair var(--transicao) both;
+}
+
+@keyframes toast-entrar {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes toast-sair {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(8px); }
+}
+
+/* ---------------------------------------------------------------------
+   ESTADO VAZIO
+   --------------------------------------------------------------------- */
+.vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-3);
+  padding: var(--esp-9) var(--esp-4);
+  text-align: center;
+  color: var(--cor-texto-suave);
+}
+
+.vazio-icone {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin-bottom: var(--esp-2);
+  border-radius: 50%;
+  background: var(--cor-primaria-suave);
+  color: var(--cor-primaria-texto);
+}
+
+.vazio h3 {
+  color: var(--cor-texto);
+}
+
+.vazio p {
+  max-width: 32ch;
+}
+
+/* ---------------------------------------------------------------------
+   SKELETON (carregamento)
+   Brilho lento e discreto; desligado com prefers-reduced-motion (global).
+   --------------------------------------------------------------------- */
+.skeleton {
+  display: block;
+  min-height: 1em;
+  border-radius: var(--raio-sm);
+  background: linear-gradient(
+    90deg,
+    var(--cor-borda) 25%,
+    color-mix(in srgb, var(--cor-borda) 45%, var(--cor-superficie)) 50%,
+    var(--cor-borda) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-brilho 1.6s ease-in-out infinite;
+}
+
+.skeleton-bloco  { height: 104px; border-radius: var(--raio-md); }
+.skeleton-linha  { height: 1em; margin-block: var(--esp-2); }
+.skeleton-curta  { width: 55%; }
+
+@keyframes skeleton-brilho {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* ---------------------------------------------------------------------
+   DIVISOR
+   --------------------------------------------------------------------- */
+.divisor {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-4);
+  height: 1px;
+  margin-block: var(--esp-6);
+  border: 0;
+  background: var(--cor-borda);
+}
+
+.divisor-texto {
+  height: auto;
+  background: none;
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
+
+.divisor-texto::before,
+.divisor-texto::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--cor-borda);
+}
+
+/* ---------------------------------------------------------------------
+   CABEÇALHO DE PÁGINA (.topo)
+   Fixo no topo com leve transparência: mantém o contexto ao rolar.
+   --------------------------------------------------------------------- */
+.topo {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-topo);
+  background: color-mix(in srgb, var(--cor-fundo) 92%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.topo-conteudo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  min-height: 64px;
+}
+
+.topo-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+  min-height: var(--alvo-toque);
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-lg);
+  font-weight: 700;
+  color: var(--cor-texto);
+  text-decoration: none;
+}
+
+.topo-logo::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--cor-primaria);
+  box-shadow: 4px -3px 0 -2px var(--cor-sucesso);
+}
+
+.topo-acao {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+}

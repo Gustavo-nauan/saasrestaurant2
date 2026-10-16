@@ -1,0 +1,159 @@
+/* =====================================================================
+   tokens.css  |  FASE 2  |  Design tokens (única fonte de valores)
+   PORQUÊ: todo valor de cor, espaçamento, raio, sombra e tempo mora
+   aqui. Os componentes só usam var(--...), então trocar a identidade
+   visual (ou criar o tema escuro da cozinha) é mexer em UM arquivo.
+   ===================================================================== */
+
+:root {
+  /* ---------- Cores de marca (tons de comida: tomate e mostarda) ---------- */
+  --cor-primaria: #E03A1E;          /* tomate */
+  --cor-primaria-hover: #C42F15;
+  --cor-primaria-suave: #FDE8E3;
+  --cor-destaque: #F5A623;          /* mostarda */
+  --cor-destaque-suave: #FEF1D6;
+
+  /* ---------- Superfícies e texto (quentes, nunca cinza frio) ---------- */
+  --cor-fundo: #FFF8F0;             /* papel */
+  --cor-superficie: #FFFFFF;
+  --cor-borda: #F0E4D6;
+  --cor-texto: #2B1A12;
+  --cor-texto-suave: #7A6558;       /* 5,2:1 sobre o fundo -> AA */
+  --cor-escuro: #1A0F0A;            /* hero e cozinha */
+
+  /* ---------- Feedback ---------- */
+  --cor-sucesso: #2E9E5B;
+  --cor-erro: #C62828;
+  --cor-aviso: #F5A623;
+
+  /* ---------- Cores auxiliares (acessibilidade) ----------
+     --cor-sobre-primaria: texto em cima do tomate. Fica FIXO (não muda
+       no tema escuro) para o botão primário ser sempre branco.
+     --cor-primaria-texto: tomate usado COMO COR DE TEXTO. O #E03A1E puro
+       dá só 4,4:1 sobre branco; o tom do hover passa de 5,5:1 (AA).
+     --cor-borda-campo: borda de inputs; --cor-borda é bonita mas fraca
+       demais (<3:1) para delimitar um campo de formulário. */
+  --cor-sobre-primaria: #FFFFFF;
+  --cor-primaria-texto: #C42F15;
+  --cor-borda-campo: #9C8576;
+  --cor-texto-sobre-escuro: #FFF8F0;
+  --cor-texto-suave-sobre-escuro: #D9C7BA;
+
+  /* ---------- Status do pedido ----------
+     Cada status tem 3 tons: forte (ponto/borda), suave (fundo do badge)
+     e texto (escurecido para passar AA sobre o fundo suave). */
+  --status-recebido: #2F6FB5;
+  --status-recebido-suave: #E3EEF9;
+  --status-recebido-texto: #1F4E85;
+
+  --status-preparo: #F5A623;
+  --status-preparo-suave: #FEF1D6;
+  --status-preparo-texto: #8A5200;
+
+  --status-pronto: #2E9E5B;
+  --status-pronto-suave: #DFF3E7;
+  --status-pronto-texto: #1B6B3B;
+
+  --status-finalizado: #7A6558;
+  --status-finalizado-suave: #F0E4D6;
+  --status-finalizado-texto: #5C4A3F;
+
+  --status-cancelado: #C62828;
+  --status-cancelado-suave: #FBE3E3;
+  --status-cancelado-texto: #9E1C1C;
+
+  /* ---------- Tipografia ----------
+     Outfit nos títulos (personalidade), Inter no corpo (leitura).
+     Escala fluida com clamp(): cresce suavemente entre 360px e 1280px
+     sem precisar de media queries. O corpo nunca fica abaixo de 16px
+     (evita zoom automático de inputs no iOS). */
+  --fonte-titulo: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fonte-corpo: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --texto-xs: clamp(0.75rem, 0.73rem + 0.1vw, 0.8125rem);
+  --texto-sm: clamp(0.875rem, 0.85rem + 0.12vw, 0.9375rem);
+  --texto-base: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+  --texto-lg: clamp(1.125rem, 1.07rem + 0.27vw, 1.25rem);
+  --texto-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --texto-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --texto-3xl: clamp(1.875rem, 1.5rem + 1.9vw, 2.75rem);
+  --texto-4xl: clamp(2.25rem, 1.6rem + 3.2vw, 4rem);
+
+  /* ---------- Espaçamento (escala de 4px) ---------- */
+  --esp-1: 0.25rem;   /*  4px */
+  --esp-2: 0.5rem;    /*  8px */
+  --esp-3: 0.75rem;   /* 12px */
+  --esp-4: 1rem;      /* 16px */
+  --esp-5: 1.25rem;   /* 20px */
+  --esp-6: 1.5rem;    /* 24px */
+  --esp-7: 2rem;      /* 32px */
+  --esp-8: 2.5rem;    /* 40px */
+  --esp-9: 3rem;      /* 48px */
+  --esp-10: 4rem;     /* 64px */
+  --esp-11: 5rem;     /* 80px */
+  --esp-12: 6rem;     /* 96px */
+
+  --container-max: 1100px;
+  --container-pad: clamp(1rem, 4vw, 2rem);
+  --alvo-toque: 44px; /* tamanho mínimo de qualquer alvo clicável */
+
+  /* ---------- Raios ---------- */
+  --raio-sm: 8px;
+  --raio-md: 14px;
+  --raio-lg: 22px;
+  --raio-pill: 999px;
+
+  /* ---------- Sombras quentes ----------
+     Marrom translúcido em vez de preto: sombra cinza fria destoa do
+     fundo cor de papel e deixa o visual "frio". */
+  --sombra-sm: 0 1px 2px rgba(74, 36, 16, 0.08), 0 1px 3px rgba(74, 36, 16, 0.06);
+  --sombra-md: 0 4px 12px rgba(74, 36, 16, 0.10), 0 2px 4px rgba(74, 36, 16, 0.06);
+  --sombra-lg: 0 16px 40px rgba(74, 36, 16, 0.18), 0 4px 12px rgba(74, 36, 16, 0.08);
+
+  /* ---------- Transições ---------- */
+  --transicao-rapida: 150ms ease;
+  --transicao: 250ms ease;
+
+  /* ---------- Camadas (z-index nomeados) ---------- */
+  --z-base: 1;
+  --z-topo: 100;
+  --z-modal: 1000;
+  --z-toast: 1100;
+}
+
+/* =====================================================================
+   TEMA ESCURO
+   PORQUÊ aqui: redefinir os MESMOS tokens dentro de um container faz
+   todos os componentes se adaptarem sozinhos (nenhum componente precisa
+   saber que existe tema escuro). Previsto para a tela da cozinha.
+   Atenção: tokens que dependem de outros (sombras, tons suaves) precisam
+   ser redeclarados aqui, pois var() é resolvido onde o token é declarado.
+   ===================================================================== */
+.tema-escuro {
+  --cor-fundo: #1A0F0A;
+  --cor-superficie: #2A1A12;
+  --cor-borda: #4A3328;
+  --cor-borda-campo: #A8917F;
+  --cor-texto: #FFF8F0;
+  --cor-texto-suave: #D9C7BA;
+
+  --cor-primaria-suave: rgba(224, 58, 30, 0.22);
+  --cor-destaque-suave: rgba(245, 166, 35, 0.18);
+  /* Tomate mais claro: o tomate puro sobre marrom escuro dá só ~4,3:1. */
+  --cor-primaria-texto: #FF8A6E;
+
+  --status-recebido-suave: rgba(47, 111, 181, 0.28);
+  --status-recebido-texto: #9CC4F2;
+  --status-preparo-suave: rgba(245, 166, 35, 0.22);
+  --status-preparo-texto: #F8CB75;
+  --status-pronto-suave: rgba(46, 158, 91, 0.26);
+  --status-pronto-texto: #7FDBA6;
+  --status-finalizado-suave: rgba(217, 199, 186, 0.16);
+  --status-finalizado-texto: #D9C7BA;
+  --status-cancelado-suave: rgba(198, 40, 40, 0.30);
+  --status-cancelado-texto: #FF9C94;
+
+  --sombra-sm: 0 1px 2px rgba(0, 0, 0, 0.40);
+  --sombra-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --sombra-lg: 0 16px 40px rgba(0, 0, 0, 0.60);
+}

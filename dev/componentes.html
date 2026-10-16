@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Componentes — página de desenvolvimento</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='18' r='12' fill='%23E03A1E'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap">
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/componentes.css">
+
+  <!-- Estilos exclusivos desta página de vitrine (layout da documentação). -->
+  <style>
+    .vitrine { padding-block: var(--esp-8); }
+    .vitrine h2 { margin-bottom: var(--esp-6); }
+    .bloco { margin-bottom: var(--esp-9); }
+    .bloco > h3 { margin-bottom: var(--esp-4); padding-bottom: var(--esp-2); border-bottom: 1px solid var(--cor-borda); }
+    .linha { display: flex; flex-wrap: wrap; align-items: center; gap: var(--esp-3); }
+    .grade { display: grid; gap: var(--esp-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); }
+    .nome-var { font-family: ui-monospace, Consolas, monospace; font-size: var(--texto-xs); color: var(--cor-texto-suave); word-break: break-all; }
+    .amostra { overflow: hidden; background: var(--cor-superficie); border: 1px solid var(--cor-borda); border-radius: var(--raio-md); }
+    .amostra-cor { height: 64px; }
+    .amostra-info { padding: var(--esp-2) var(--esp-3); font-size: var(--texto-sm); }
+    .icone-celula { display: flex; flex-direction: column; align-items: center; gap: var(--esp-2); padding: var(--esp-4); background: var(--cor-superficie); border: 1px solid var(--cor-borda); border-radius: var(--raio-md); }
+    .tipo-linha { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--esp-4); margin-bottom: var(--esp-3); }
+    .tipo-linha .nome-var { min-width: 100px; }
+    .espaco-barra { height: 16px; background: var(--cor-primaria); border-radius: var(--raio-sm); }
+    .raio-caixa { width: 80px; height: 80px; background: var(--cor-primaria-suave); border: 2px solid var(--cor-primaria); }
+    .sombra-caixa { width: 100px; height: 80px; background: var(--cor-superficie); border-radius: var(--raio-md); }
+    .tema-escuro.vitrine { border-top: 1px solid var(--cor-borda); }
+    .cabecalho-dev { padding-block: var(--esp-7); }
+    .cabecalho-dev p { color: var(--cor-texto-suave); margin-top: var(--esp-2); }
+  </style>
+</head>
+<body>
+  <header class="container cabecalho-dev">
+    <h1>Componentes</h1>
+    <p>Vitrine do design system (tema claro e tema escuro). Página só para desenvolvimento.</p>
+  </header>
+
+  <!-- Cada tema recebe uma cópia do mesmo template (ver script no fim). -->
+  <section class="vitrine" id="tema-claro" aria-label="Tema claro">
+    <div class="container" data-destino></div>
+  </section>
+
+  <section class="vitrine tema-escuro" id="tema-escuro" aria-label="Tema escuro">
+    <div class="container" data-destino></div>
+  </section>
+
+  <template id="modelo-vitrine">
+    <h2 data-titulo-tema>Tema</h2>
+
+    <!-- PALETA -->
+    <div class="bloco">
+      <h3>Paleta de cores</h3>
+      <div class="grade" data-paleta></div>
+    </div>
+
+    <!-- TIPOGRAFIA -->
+    <div class="bloco">
+      <h3>Escala tipográfica</h3>
+      <div data-tipografia></div>
+    </div>
+
+    <!-- ESPAÇAMENTO / RAIOS / SOMBRAS -->
+    <div class="bloco">
+      <h3>Espaçamento, raios e sombras</h3>
+      <div data-espacos></div>
+      <div class="linha" style="margin-top: var(--esp-5)">
+        <div><div class="raio-caixa" style="border-radius: var(--raio-sm)"></div><p class="nome-var">--raio-sm</p></div>
+        <div><div class="raio-caixa" style="border-radius: var(--raio-md)"></div><p class="nome-var">--raio-md</p></div>
+        <div><div class="raio-caixa" style="border-radius: var(--raio-lg)"></div><p class="nome-var">--raio-lg</p></div>
+        <div><div class="raio-caixa" style="border-radius: var(--raio-pill)"></div><p class="nome-var">--raio-pill</p></div>
+      </div>
+      <div class="linha" style="margin-top: var(--esp-5); gap: var(--esp-6)">
+        <div><div class="sombra-caixa" style="box-shadow: var(--sombra-sm)"></div><p class="nome-var">--sombra-sm</p></div>
+        <div><div class="sombra-caixa" style="box-shadow: var(--sombra-md)"></div><p class="nome-var">--sombra-md</p></div>
+        <div><div class="sombra-caixa" style="box-shadow: var(--sombra-lg)"></div><p class="nome-var">--sombra-lg</p></div>
+      </div>
+    </div>
+
+    <!-- BOTÕES -->
+    <div class="bloco">
+      <h3>Botões</h3>
+      <div class="linha">
+        <button class="btn btn-primario">Primário</button>
+        <button class="btn btn-secundario">Secundário</button>
+        <button class="btn btn-fantasma">Fantasma</button>
+        <button class="btn btn-primario" disabled>Desabilitado</button>
+        <button class="btn btn-secundario" disabled>Desabilitado</button>
+      </div>
+      <div class="linha" style="margin-top: var(--esp-4)">
+        <button class="btn btn-primario btn-grande">Grande <span data-icone="seta-direita" data-tamanho="22"></span></button>
+        <button class="btn btn-primario btn-carregando" data-alternar-carregando>Carregando</button>
+        <button class="btn btn-secundario btn-carregando">Carregando</button>
+        <button class="btn btn-fantasma btn-icone" aria-label="Fechar"><span data-icone="fechar"></span></button>
+      </div>
+      <div style="margin-top: var(--esp-4)">
+        <button class="btn btn-primario btn-bloco">Botão em bloco (largura total)</button>
+      </div>
+    </div>
+
+    <!-- CAMPOS -->
+    <div class="bloco">
+      <h3>Campos de formulário</h3>
+      <div class="grade">
+        <div class="campo">
+          <label data-id-prefixo="for" for="nome">Nome</label>
+          <input type="text" data-id="nome" placeholder="Maria Silva" autocomplete="off">
+          <p class="campo-ajuda">Como devemos te chamar.</p>
+        </div>
+        <div class="campo">
+          <label data-id-prefixo="for" for="email">E-mail</label>
+          <input type="email" data-id="email" placeholder="voce@email.com" autocomplete="off">
+        </div>
+        <div class="campo">
+          <label data-id-prefixo="for" for="senha">Senha</label>
+          <input type="password" data-id="senha" value="123456" autocomplete="off">
+        </div>
+        <div class="campo">
+          <label data-id-prefixo="for" for="tel">Telefone</label>
+          <input type="tel" data-id="tel" placeholder="(11) 99999-9999" autocomplete="off">
+        </div>
+        <div class="campo campo-erro">
+          <label data-id-prefixo="for" for="email-erro">E-mail (com erro)</label>
+          <input type="email" data-id="email-erro" value="isso-nao-e-email" aria-invalid="true" autocomplete="off">
+          <p class="campo-mensagem-erro"><span data-icone="alerta" data-tamanho="16"></span> Digite um e-mail válido.</p>
+        </div>
+        <div class="campo">
+          <label data-id-prefixo="for" for="obs">Observação</label>
+          <textarea data-id="obs" placeholder="Sem cebola, por favor"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD DE PRODUTO -->
+    <div class="bloco">
+      <h3>Card de produto</h3>
+      <div class="grade" style="grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr))">
+        <article class="card-produto">
+          <div class="card-produto-imagem"></div>
+          <div class="card-produto-corpo">
+            <h4 class="card-produto-nome">X-Burger da Casa</h4>
+            <p class="card-produto-descricao">Pão brioche, blend de 160g, queijo prato, alface, tomate e molho especial da casa.</p>
+          </div>
+          <div class="card-produto-rodape">
+            <span class="card-produto-preco" data-moeda="2890"></span>
+            <button class="card-produto-add" aria-label="Adicionar X-Burger da Casa"><span data-icone="mais"></span></button>
+          </div>
+        </article>
+        <article class="card-produto">
+          <div class="card-produto-imagem"></div>
+          <div class="card-produto-corpo">
+            <h4 class="card-produto-nome">Suco de laranja</h4>
+            <p class="card-produto-descricao">Natural, 400ml.</p>
+          </div>
+          <div class="card-produto-rodape">
+            <span class="card-produto-preco" data-moeda="950"></span>
+            <button class="card-produto-add" aria-label="Adicionar Suco de laranja"><span data-icone="mais"></span></button>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- BADGES -->
+    <div class="bloco">
+      <h3>Badges de status</h3>
+      <div class="linha">
+        <span class="badge badge-recebido">Recebido</span>
+        <span class="badge badge-preparo">Em preparo</span>
+        <span class="badge badge-pronto">Pronto</span>
+        <span class="badge badge-finalizado">Finalizado</span>
+        <span class="badge badge-cancelado">Cancelado</span>
+      </div>
+    </div>
+
+    <!-- CHIPS -->
+    <div class="bloco">
+      <h3>Chips / abas de categoria</h3>
+      <div class="chips" role="tablist" aria-label="Categorias de exemplo">
+        <button class="chip chip-ativo" role="tab" aria-selected="true">Lanches</button>
+        <button class="chip" role="tab" aria-selected="false">Bebidas</button>
+        <button class="chip" role="tab" aria-selected="false">Sobremesas</button>
+        <button class="chip" role="tab" aria-selected="false">Porções</button>
+      </div>
+    </div>
+
+    <!-- MODAL / SHEET -->
+    <div class="bloco">
+      <h3>Modal e bottom-sheet</h3>
+      <div class="linha">
+        <button class="btn btn-secundario" data-abrir="modal">Abrir modal</button>
+        <button class="btn btn-secundario" data-abrir="sheet">Abrir bottom-sheet</button>
+      </div>
+      <div class="grade" style="margin-top: var(--esp-5); grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr))">
+        <div class="sobreposicao sobreposicao-estatica">
+          <div class="modal">
+            <div class="modal-topo"><h3>Modal (prévia)</h3></div>
+            <p>Caixa centralizada para decisões rápidas.</p>
+          </div>
+        </div>
+        <div class="sobreposicao sobreposicao-sheet sobreposicao-estatica">
+          <div class="sheet">
+            <div class="modal-topo"><h3>Sheet (prévia)</h3></div>
+            <p>Painel que sobe de baixo.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sobreposicao" data-modal role="dialog" aria-modal="true" aria-label="Exemplo de modal" tabindex="-1">
+        <div class="modal">
+          <div class="modal-topo">
+            <h3>Remover item?</h3>
+            <button class="btn btn-fantasma btn-icone" data-fechar aria-label="Fechar"><span data-icone="fechar"></span></button>
+          </div>
+          <p>O item sairá do seu pedido. Você pode adicioná-lo de novo depois.</p>
+          <div class="modal-acoes">
+            <button class="btn btn-primario" data-fechar>Remover</button>
+            <button class="btn btn-fantasma" data-fechar>Cancelar</button>
+          </div>
+        </div>
+      </div>
+      <div class="sobreposicao sobreposicao-sheet" data-sheet role="dialog" aria-modal="true" aria-label="Exemplo de bottom-sheet" tabindex="-1">
+        <div class="sheet">
+          <div class="modal-topo">
+            <h3>Seu pedido</h3>
+            <button class="btn btn-fantasma btn-icone" data-fechar aria-label="Fechar"><span data-icone="fechar"></span></button>
+          </div>
+          <p>2 itens · <span data-moeda="3840"></span></p>
+          <div class="modal-acoes">
+            <button class="btn btn-primario btn-bloco" data-fechar>Confirmar pedido</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOASTS -->
+    <div class="bloco">
+      <h3>Toasts</h3>
+      <div class="linha">
+        <button class="btn btn-secundario" data-toast="sucesso">Sucesso</button>
+        <button class="btn btn-secundario" data-toast="erro">Erro</button>
+        <button class="btn btn-secundario" data-toast="info">Info</button>
+      </div>
+      <div class="linha" style="margin-top: var(--esp-4)">
+        <div class="toast toast-sucesso" style="animation: none"><span data-icone="check" data-tamanho="20"></span><span>Pedido enviado!</span></div>
+        <div class="toast toast-erro" style="animation: none"><span data-icone="alerta" data-tamanho="20"></span><span>Não foi possível enviar.</span></div>
+        <div class="toast toast-info" style="animation: none"><span data-icone="sino" data-tamanho="20"></span><span>Seu pedido está em preparo.</span></div>
+      </div>
+    </div>
+
+    <!-- VAZIO, SKELETON, SPINNER, DIVISOR -->
+    <div class="bloco">
+      <h3>Estado vazio</h3>
+      <div class="vazio">
+        <div class="vazio-icone"><span data-icone="sacola" data-tamanho="32"></span></div>
+        <h3>Seu carrinho está vazio</h3>
+        <p>Escolha algo gostoso no cardápio para começar.</p>
+        <button class="btn btn-primario">Ver cardápio</button>
+      </div>
+    </div>
+
+    <div class="bloco">
+      <h3>Skeleton e spinner</h3>
+      <div class="grade" style="grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr))">
+        <div class="card-produto" aria-busy="true">
+          <div class="card-produto-imagem skeleton"></div>
+          <div class="card-produto-corpo">
+            <div class="skeleton skeleton-linha"></div>
+            <div class="skeleton skeleton-linha skeleton-curta"></div>
+          </div>
+          <div class="card-produto-rodape"><div class="skeleton skeleton-linha skeleton-curta"></div></div>
+        </div>
+        <div class="linha"><span class="spinner" role="status" aria-label="Carregando"></span> <span>Carregando...</span></div>
+      </div>
+    </div>
+
+    <div class="bloco">
+      <h3>Divisor</h3>
+      <hr class="divisor">
+      <div class="divisor divisor-texto">ou</div>
+    </div>
+
+    <!-- TOPO -->
+    <div class="bloco">
+      <h3>Cabeçalho de página (.topo)</h3>
+      <div class="topo" style="position: static">
+        <div class="container topo-conteudo">
+          <a class="topo-logo" href="#">Pedido na Mão</a>
+          <div class="topo-acao">
+            <button class="btn btn-fantasma btn-icone" aria-label="Notificações"><span data-icone="sino"></span></button>
+            <button class="btn btn-fantasma btn-icone" aria-label="Carrinho"><span data-icone="carrinho"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÍCONES -->
+    <div class="bloco">
+      <h3>Ícones</h3>
+      <div class="grade" style="grid-template-columns: repeat(auto-fill, minmax(min(100%, 110px), 1fr))" data-icones></div>
+    </div>
+  </template>
+
+  <script type="module">
+    import { ICONES, icone } from "../js/icones.js";
+    import { formatarMoeda, mostrarToast } from "../js/utils.js";
+
+    /* Listas usadas para gerar a documentação visual. */
+    const CORES = [
+      "cor-primaria", "cor-primaria-hover", "cor-primaria-suave", "cor-destaque",
+      "cor-destaque-suave", "cor-fundo", "cor-superficie", "cor-borda", "cor-texto",
+      "cor-texto-suave", "cor-escuro", "cor-sucesso", "cor-erro", "cor-aviso",
+      "status-recebido", "status-preparo", "status-pronto", "status-finalizado", "status-cancelado",
+    ];
+    const TEXTOS = ["xs", "sm", "base", "lg", "xl", "2xl", "3xl", "4xl"];
+    const ESPACOS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+    const modelo = document.getElementById("modelo-vitrine");
+    let contadorIds = 0;
+
+    function montarTema(secao, titulo) {
+      const sufixo = `-${++contadorIds}`; // ids únicos entre os dois temas
+      const destino = secao.querySelector("[data-destino]");
+      destino.appendChild(modelo.content.cloneNode(true));
+
+      destino.querySelector("[data-titulo-tema]").textContent = titulo;
+
+      destino.querySelector("[data-paleta]").innerHTML = CORES.map((c) => `
+        <div class="amostra">
+          <div class="amostra-cor" style="background: var(--${c})"></div>
+          <div class="amostra-info"><strong>${c.replace(/^(cor|status)-/, "")}</strong><br><span class="nome-var">--${c}</span></div>
+        </div>`).join("");
+
+      destino.querySelector("[data-tipografia]").innerHTML = TEXTOS.map((t) => `
+        <div class="tipo-linha">
+          <span class="nome-var">--texto-${t}</span>
+          <span style="font-size: var(--texto-${t}); font-family: var(--fonte-titulo); font-weight: 600">Peça pelo celular</span>
+        </div>`).join("") + `
+        <p style="margin-top: var(--esp-4)"><span class="nome-var">--fonte-corpo (Inter)</span><br>
+        Corpo de texto em Inter 400: escolha, peça e a gente avisa quando estiver pronto.</p>`;
+
+      destino.querySelector("[data-espacos]").innerHTML = ESPACOS.map((n) => `
+        <div class="tipo-linha" style="margin-bottom: var(--esp-1)">
+          <span class="nome-var">--esp-${n}</span>
+          <span class="espaco-barra" style="width: var(--esp-${n})"></span>
+        </div>`).join("");
+
+      destino.querySelector("[data-icones]").innerHTML = Object.keys(ICONES).map((nome) => `
+        <div class="icone-celula">${icone(nome, 28)}<span class="nome-var">${nome}</span></div>`).join("");
+
+      // Ícones e moedas inline
+      destino.querySelectorAll("[data-icone]").forEach((el) => {
+        el.style.display = "inline-flex";
+        el.innerHTML = icone(el.dataset.icone, Number(el.dataset.tamanho) || 24);
+      });
+      destino.querySelectorAll("[data-moeda]").forEach((el) => {
+        el.textContent = formatarMoeda(Number(el.dataset.moeda));
+      });
+
+      // Ids únicos para pares label/input
+      destino.querySelectorAll("[data-id]").forEach((input) => {
+        const id = input.dataset.id + sufixo;
+        input.id = id;
+        input.closest(".campo").querySelector("label").setAttribute("for", id);
+      });
+    }
+
+    montarTema(document.getElementById("tema-claro"), "Tema claro");
+    montarTema(document.getElementById("tema-escuro"), "Tema escuro (cozinha)");
+
+    /* Interações da vitrine */
+    let ultimoFoco = null;
+
+    document.addEventListener("click", (e) => {
+      const abrir = e.target.closest("[data-abrir]");
+      if (abrir) {
+        const painel = abrir.closest(".vitrine").querySelector(`[data-${abrir.dataset.abrir}]`);
+        ultimoFoco = abrir;
+        painel.classList.add("aberto");
+        painel.querySelector("button")?.focus();
+        return;
+      }
+      const fechar = e.target.closest("[data-fechar]");
+      const fundo = e.target.classList.contains("sobreposicao") ? e.target : null;
+      if (fechar || (fundo && fundo.matches("[data-modal], [data-sheet]"))) {
+        (fundo || fechar.closest(".sobreposicao")).classList.remove("aberto");
+        ultimoFoco?.focus();
+        return;
+      }
+      const toast = e.target.closest("[data-toast]");
+      if (toast) {
+        const mensagens = { sucesso: "Pedido enviado com sucesso!", erro: "Não foi possível enviar o pedido.", info: "Seu pedido está em preparo." };
+        mostrarToast(mensagens[toast.dataset.toast], toast.dataset.toast);
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      document.querySelectorAll(".sobreposicao.aberto").forEach((p) => p.classList.remove("aberto"));
+      ultimoFoco?.focus();
+    });
+  </script>
+</body>
+</html>
