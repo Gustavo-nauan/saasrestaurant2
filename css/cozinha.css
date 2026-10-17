@@ -1,0 +1,578 @@
+/* =====================================================================
+   cozinha.css  |  FASE 4  |  Painel da cozinha (KDS em tema escuro)
+   Depende de: tokens.css, base.css, componentes.css.
+   Só variáveis dos tokens; medidas literais apenas estruturais.
+   ===================================================================== */
+
+/* base.css não define [hidden]. */
+.cozinha-pagina [hidden] {
+  display: none !important;
+}
+
+.cozinha-pagina {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  overflow-x: hidden;
+}
+
+/* ---------------------------------------------------------------------
+   BANNERS DE CONEXÃO E DE SOM NO TOPO
+   --------------------------------------------------------------------- */
+.cozinha-banner-offline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  padding: var(--esp-4) var(--container-pad);
+  background: var(--cor-erro);
+  color: var(--cor-sobre-primaria);
+  font-size: var(--texto-base);
+  font-weight: 600;
+}
+
+.cozinha-banner-offline-info,
+.cozinha-banner-som-info {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  min-width: 0;
+}
+
+.cozinha-banner-icone {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.cozinha-btn-reconectar {
+  background: var(--cor-sobre-primaria);
+  border-color: var(--cor-sobre-primaria);
+  color: var(--cor-escuro);
+}
+
+.cozinha-btn-reconectar:hover:not(:disabled) {
+  background: var(--cor-texto-sobre-escuro);
+}
+
+.cozinha-banner-som {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  padding: var(--esp-3) var(--container-pad);
+  background: var(--cor-destaque-suave);
+  border-bottom: 1px solid var(--cor-destaque);
+  color: var(--cor-texto);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.cozinha-banner-som .cozinha-banner-icone {
+  color: var(--cor-destaque);
+}
+
+.cozinha-btn-ativar-som {
+  padding-inline: var(--esp-4);
+  font-size: var(--texto-sm);
+}
+
+/* ---------------------------------------------------------------------
+   CABEÇALHO
+   --------------------------------------------------------------------- */
+.cozinha-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3) var(--esp-4);
+  padding: var(--esp-3) var(--container-pad);
+  background: var(--cor-superficie);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.cozinha-topo-esquerda {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-2) var(--esp-4);
+  min-width: 0;
+}
+
+.cozinha-contexto {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--esp-1) var(--esp-3);
+  min-width: 0;
+}
+
+.cozinha-restaurante {
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-base);
+  font-weight: 700;
+  color: var(--cor-texto);
+}
+
+.cozinha-funcionario {
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
+
+.cozinha-topo-direita {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-2) var(--esp-3);
+}
+
+.cozinha-finalizados {
+  font-size: var(--texto-sm);
+  font-weight: 500;
+  color: var(--cor-texto-suave);
+  white-space: nowrap;
+}
+
+.cozinha-relogio {
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-lg);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--cor-texto);
+  padding-inline: var(--esp-2);
+}
+
+.cozinha-conexao {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: var(--esp-1) var(--esp-3);
+  border-radius: var(--raio-pill);
+  background: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cozinha-conexao-ponto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cor-aviso);
+  flex-shrink: 0;
+}
+
+.cozinha-conexao[data-estado="conectado"] .cozinha-conexao-ponto {
+  background: var(--cor-sucesso);
+}
+
+.cozinha-conexao[data-estado="conectado"] {
+  color: var(--status-pronto-texto);
+  border-color: var(--status-pronto);
+  background: var(--status-pronto-suave);
+}
+
+.cozinha-conexao[data-estado="offline"] .cozinha-conexao-ponto {
+  background: var(--cor-erro);
+}
+
+.cozinha-conexao[data-estado="offline"] {
+  color: var(--status-cancelado-texto);
+  border-color: var(--status-cancelado);
+  background: var(--status-cancelado-suave);
+}
+
+.cozinha-btn-som {
+  padding-inline: var(--esp-3);
+  font-size: var(--texto-sm);
+  border-color: var(--cor-borda);
+}
+
+.cozinha-btn-som[aria-pressed="true"] {
+  background: var(--status-pronto-suave);
+  border-color: var(--status-pronto);
+  color: var(--status-pronto-texto);
+}
+
+/* ---------------------------------------------------------------------
+   ABAS NO CELULAR (< 768px)
+   --------------------------------------------------------------------- */
+.cozinha-abas {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-topo);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--esp-2);
+  padding: var(--esp-2) var(--container-pad);
+  background: var(--cor-superficie);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.cozinha-aba {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  min-height: var(--alvo-toque);
+  padding: var(--esp-2);
+  border: 2px solid var(--cor-borda);
+  border-radius: var(--raio-md);
+  background: var(--cor-fundo);
+  color: var(--cor-texto-suave);
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-sm);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cozinha-aba-ativa,
+.cozinha-aba[aria-selected="true"] {
+  background: var(--cor-primaria-suave);
+  border-color: var(--cor-primaria);
+  color: var(--cor-texto);
+}
+
+/* ---------------------------------------------------------------------
+   QUADRO E COLUNAS
+   --------------------------------------------------------------------- */
+.cozinha-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--esp-4) var(--container-pad) var(--esp-8);
+}
+
+.cozinha-coluna {
+  display: none;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  overflow: hidden;
+}
+
+.cozinha-coluna.cozinha-coluna-ativa {
+  display: flex;
+}
+
+.cozinha-coluna-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  padding: var(--esp-4) var(--esp-5);
+  border-bottom: 2px solid var(--cor-borda);
+}
+
+.cozinha-coluna-topo h2 {
+  font-size: var(--texto-xl);
+}
+
+.cozinha-coluna-topo-recebido {
+  border-bottom-color: var(--status-recebido);
+  background: var(--status-recebido-suave);
+  color: var(--status-recebido-texto);
+}
+
+.cozinha-coluna-topo-preparo {
+  border-bottom-color: var(--status-preparo);
+  background: var(--status-preparo-suave);
+  color: var(--status-preparo-texto);
+}
+
+.cozinha-coluna-topo-pronto {
+  border-bottom-color: var(--status-pronto);
+  background: var(--status-pronto-suave);
+  color: var(--status-pronto-texto);
+}
+
+.cozinha-contador {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding-inline: var(--esp-2);
+  border-radius: var(--raio-pill);
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.cozinha-coluna-lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  padding: var(--esp-4);
+}
+
+/* ---------------------------------------------------------------------
+   TICKET DE PEDIDO (CARTÃO)
+   --------------------------------------------------------------------- */
+.ticket {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  padding: var(--esp-5);
+  background: var(--cor-fundo);
+  border: 2px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+}
+
+.ticket-recem-chegado {
+  border-color: var(--cor-destaque);
+  box-shadow: 0 0 0 3px var(--cor-destaque-suave), var(--sombra-md);
+  animation: ticket-pulso 900ms ease 3;
+}
+
+@keyframes ticket-pulso {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.015); }
+}
+
+.ticket-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  padding-bottom: var(--esp-3);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.ticket-identificacao {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+}
+
+.ticket-senha {
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-3xl);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--cor-texto);
+  font-variant-numeric: tabular-nums;
+}
+
+.ticket-entrega {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: var(--esp-1) var(--esp-3);
+  border-radius: var(--raio-pill);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  font-size: var(--texto-base);
+  font-weight: 600;
+  color: var(--cor-texto);
+}
+
+/* Tempo de espera: normal, atenção (>= 10 min) e urgente (>= 20 min) */
+.ticket-tempo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+  padding: var(--esp-1) var(--esp-3);
+  border-radius: var(--raio-pill);
+  background: var(--cor-superficie);
+  color: var(--cor-texto-suave);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ticket-tempo-icone {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.ticket-tempo[data-nivel="atencao"] {
+  background: var(--status-preparo-suave);
+  color: var(--status-preparo-texto);
+  border: 1px solid var(--status-preparo);
+}
+
+.ticket-tempo[data-nivel="urgente"] {
+  background: var(--status-cancelado-suave);
+  color: var(--status-cancelado-texto);
+  border: 1px solid var(--status-cancelado);
+  font-weight: 700;
+}
+
+/* Lista de itens do pedido */
+.ticket-itens {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.ticket-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.ticket-item-linha {
+  display: flex;
+  align-items: baseline;
+  gap: var(--esp-2);
+  font-size: var(--texto-lg);
+}
+
+.ticket-item-qtd {
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-xl);
+  font-weight: 700;
+  color: var(--cor-destaque);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.ticket-item-nome {
+  font-weight: 600;
+  color: var(--cor-texto);
+  overflow-wrap: anywhere;
+}
+
+/* Observação do item em destaque visual forte */
+.ticket-item-obs {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-2);
+  padding: var(--esp-2) var(--esp-3);
+  border-left: 4px solid var(--cor-destaque);
+  border-radius: var(--raio-sm);
+  background: var(--cor-destaque-suave);
+  color: var(--status-preparo-texto);
+  font-size: var(--texto-base);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* Observação geral do pedido em bloco próprio */
+.ticket-obs-geral {
+  padding: var(--esp-3);
+  border: 1px solid var(--cor-destaque);
+  border-radius: var(--raio-md);
+  background: var(--cor-destaque-suave);
+  color: var(--status-preparo-texto);
+  font-size: var(--texto-sm);
+  overflow-wrap: anywhere;
+}
+
+.ticket-obs-rotulo {
+  display: block;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: var(--texto-xs);
+  margin-bottom: var(--esp-1);
+}
+
+/* Ações do ticket (botões grandes, min-height 56px) */
+.ticket-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+  margin-top: var(--esp-1);
+}
+
+.ticket-btn-principal {
+  flex: 1 1 180px;
+  min-height: 56px;
+  padding-inline: var(--esp-4);
+  font-size: var(--texto-base);
+}
+
+.ticket-btn-pronto {
+  background: var(--cor-sucesso);
+  border-color: var(--cor-sucesso);
+  color: var(--cor-sobre-primaria);
+}
+
+.ticket-btn-pronto:hover:not(:disabled) {
+  background: var(--status-pronto-texto);
+  border-color: var(--status-pronto-texto);
+}
+
+.ticket-btn-cancelar {
+  min-height: 56px;
+  padding-inline: var(--esp-4);
+  font-size: var(--texto-sm);
+}
+
+.cozinha-pagina .btn-carregando:disabled {
+  opacity: 1;
+}
+
+/* Estado vazio dentro da coluna */
+.cozinha-vazio {
+  padding: var(--esp-8) var(--esp-4);
+}
+
+.cozinha-vazio p {
+  font-size: var(--texto-base);
+  font-weight: 500;
+}
+
+/* Modal de confirmação de cancelamento */
+.cozinha-btn-confirmar-cancelar {
+  background: var(--cor-erro);
+  border-color: var(--cor-erro);
+}
+
+body.modal-aberto {
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------------
+   TABLET E DESKTOP (>= 768px): 3 colunas lado a lado com rolagem própria
+   --------------------------------------------------------------------- */
+@media (min-width: 768px) {
+  .cozinha-pagina {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .cozinha-abas {
+    display: none;
+  }
+
+  .cozinha-main {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--esp-4);
+    padding: var(--esp-4) var(--container-pad);
+  }
+
+  .cozinha-coluna {
+    display: flex;
+    min-height: 0;
+    height: 100%;
+  }
+
+  .cozinha-coluna-lista {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+}

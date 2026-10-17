@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Cozinha | Pedido na Mão</title>
+  <meta name="theme-color" content="#1A0F0A">
+
+  <link rel="icon" type="image/png" href="../assets/img/logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap">
+
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/componentes.css">
+  <link rel="stylesheet" href="../css/cozinha.css">
+</head>
+<body class="tema-escuro cozinha-pagina">
+  <!-- Banner crítico de queda de conexão -->
+  <div class="cozinha-banner-offline" id="banner-offline" role="alert" hidden>
+    <div class="cozinha-banner-offline-info">
+      <span class="cozinha-banner-icone" data-icone="alerta" data-tamanho="24"></span>
+      <span>Sem conexão com o servidor. Novos pedidos podem não aparecer.</span>
+    </div>
+    <button type="button" class="btn btn-secundario cozinha-btn-reconectar" id="btn-tentar-agora">
+      Tentar agora
+    </button>
+  </div>
+
+  <!-- Aviso fixo de som desligado / bloqueado pelo navegador -->
+  <div class="cozinha-banner-som" id="banner-som" role="region" aria-label="Alerta sonoro">
+    <div class="cozinha-banner-som-info">
+      <span class="cozinha-banner-icone" data-icone="sino" data-tamanho="22"></span>
+      <span>Som desligado. Toque para ativar os alertas de novos pedidos.</span>
+    </div>
+    <button type="button" class="btn btn-primario cozinha-btn-ativar-som" id="btn-banner-som">
+      Ativar som
+    </button>
+  </div>
+
+  <!-- Cabeçalho do painel -->
+  <header class="cozinha-topo">
+    <div class="cozinha-topo-esquerda">
+      <span class="marca" data-nome-produto>
+        <img class="marca-logo" src="../assets/img/logo-branca.png" alt="" width="32" height="32"
+             onerror="console.warn('[marca] não foi possível carregar a logo:', this.getAttribute('src')); if (!this.dataset.tentouPadrao) { this.dataset.tentouPadrao = '1'; this.src = '../assets/img/logo.png'; } else { this.hidden = true; }">
+        <span class="marca-nome">Pedido na Mão</span>
+      </span>
+      <div class="cozinha-contexto">
+        <strong class="cozinha-restaurante" id="restaurante-nome"></strong>
+        <span class="cozinha-funcionario" id="funcionario-nome"></span>
+      </div>
+    </div>
+
+    <div class="cozinha-topo-direita">
+      <span class="cozinha-finalizados" id="finalizados-hoje">Finalizados hoje: 0</span>
+
+      <time class="cozinha-relogio" id="relogio" aria-label="Horário atual">--:--</time>
+
+      <div class="cozinha-conexao" id="conexao" data-estado="conectando" role="status" aria-live="polite">
+        <span class="cozinha-conexao-ponto" aria-hidden="true"></span>
+        <span id="conexao-texto">Conectando</span>
+      </div>
+
+      <button type="button" class="btn btn-fantasma cozinha-btn-som" id="btn-som-topo" aria-pressed="false">
+        <span data-icone="sino" data-tamanho="20"></span>
+        <span class="cozinha-btn-som-rotulo" id="btn-som-topo-texto">Som desligado</span>
+      </button>
+
+      <button type="button" class="btn btn-fantasma btn-icone" id="btn-sair" aria-label="Sair">
+        <span data-icone="sair" data-tamanho="22"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Abas fixas para telas pequenas (< 768px) -->
+  <nav class="cozinha-abas" id="abas-mobile" role="tablist" aria-label="Colunas de pedidos">
+    <button type="button" class="cozinha-aba cozinha-aba-ativa" role="tab" id="aba-recebido"
+            data-coluna="recebido" aria-selected="true" aria-controls="col-recebido" tabindex="0">
+      <span>Novos</span>
+      <span class="cozinha-contador" id="cont-aba-recebido">0</span>
+    </button>
+    <button type="button" class="cozinha-aba" role="tab" id="aba-em_preparo"
+            data-coluna="em_preparo" aria-selected="false" aria-controls="col-em_preparo" tabindex="-1">
+      <span>Em preparo</span>
+      <span class="cozinha-contador" id="cont-aba-em_preparo">0</span>
+    </button>
+    <button type="button" class="cozinha-aba" role="tab" id="aba-pronto"
+            data-coluna="pronto" aria-selected="false" aria-controls="col-pronto" tabindex="-1">
+      <span>Prontos</span>
+      <span class="cozinha-contador" id="cont-aba-pronto">0</span>
+    </button>
+  </nav>
+
+  <!-- Quadro principal de 3 colunas -->
+  <main class="cozinha-main" id="quadro">
+    <section class="cozinha-coluna cozinha-coluna-ativa" id="col-recebido" data-status="recebido" aria-labelledby="titulo-col-recebido">
+      <header class="cozinha-coluna-topo cozinha-coluna-topo-recebido">
+        <h2 id="titulo-col-recebido">Novos</h2>
+        <span class="cozinha-contador" id="cont-col-recebido">0</span>
+      </header>
+      <div class="cozinha-coluna-lista" id="lista-recebido"></div>
+    </section>
+
+    <section class="cozinha-coluna" id="col-em_preparo" data-status="em_preparo" aria-labelledby="titulo-col-em_preparo">
+      <header class="cozinha-coluna-topo cozinha-coluna-topo-preparo">
+        <h2 id="titulo-col-em_preparo">Em preparo</h2>
+        <span class="cozinha-contador" id="cont-col-em_preparo">0</span>
+      </header>
+      <div class="cozinha-coluna-lista" id="lista-em_preparo"></div>
+    </section>
+
+    <section class="cozinha-coluna" id="col-pronto" data-status="pronto" aria-labelledby="titulo-col-pronto">
+      <header class="cozinha-coluna-topo cozinha-coluna-topo-pronto">
+        <h2 id="titulo-col-pronto">Prontos</h2>
+        <span class="cozinha-contador" id="cont-col-pronto">0</span>
+      </header>
+      <div class="cozinha-coluna-lista" id="lista-pronto"></div>
+    </section>
+  </main>
+
+  <!-- Modal de confirmação para cancelar pedido -->
+  <div class="sobreposicao" id="modal-cancelar-fundo">
+    <div class="modal cozinha-modal-cancelar" id="modal-cancelar" role="dialog" aria-modal="true"
+         aria-labelledby="modal-cancelar-titulo" aria-describedby="modal-cancelar-desc">
+      <div class="modal-topo">
+        <h2 id="modal-cancelar-titulo">Cancelar pedido?</h2>
+        <button type="button" class="btn btn-fantasma btn-icone" id="btn-fechar-modal" aria-label="Fechar">
+          <span data-icone="fechar"></span>
+        </button>
+      </div>
+      <p id="modal-cancelar-desc"></p>
+      <div class="modal-acoes">
+        <button type="button" class="btn btn-primario cozinha-btn-confirmar-cancelar" id="btn-confirmar-cancelar">
+          Sim, cancelar pedido
+        </button>
+        <button type="button" class="btn btn-fantasma" id="btn-manter-pedido">
+          Voltar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="painel.js"></script>
+</body>
+</html>
