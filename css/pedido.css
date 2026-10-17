@@ -14,6 +14,7 @@
   overflow-x: hidden;
 }
 
+.pedido-btn-topo,
 .pedido-btn-novo {
   padding-inline: var(--esp-3);
   font-size: var(--texto-sm);

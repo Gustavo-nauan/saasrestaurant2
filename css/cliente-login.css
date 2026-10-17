@@ -29,7 +29,9 @@
 }
 
 .login-topo .marca-logo {
+  width: auto;
   height: var(--alvo-toque); /* 44px */
+  max-height: var(--alvo-toque);
 }
 
 /* ---------------------------------------------------------------------

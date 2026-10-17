@@ -150,11 +150,19 @@
   font-size: var(--texto-xl);
   font-weight: 700;
   letter-spacing: 0.01em;
-  color: var(--cor-texto-sobre-escuro);
+  color: var(--cor-fundo);
+}
+
+.inicio-marca .marca,
+.inicio-marca .marca-nome {
+  color: var(--cor-fundo);
+  font-size: var(--texto-xl);
 }
 
 .inicio-marca .marca-logo {
+  width: auto;
   height: var(--alvo-toque); /* 44px */
+  max-height: var(--alvo-toque);
 }
 
 .inicio-titulo {

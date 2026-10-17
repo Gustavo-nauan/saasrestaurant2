@@ -721,6 +721,7 @@
 .marca-logo {
   width: auto;
   height: var(--esp-7); /* 32px nas telas internas */
+  max-height: var(--esp-7);
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -731,6 +732,11 @@
 
 .marca-nome {
   line-height: 1.15;
+}
+
+.tema-escuro .marca,
+.tema-escuro .marca-nome {
+  color: var(--cor-fundo);
 }
 
 .topo-acao {

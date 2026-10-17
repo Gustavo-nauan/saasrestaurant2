@@ -22,7 +22,7 @@
   <header class="topo cardapio-topo">
     <div class="container topo-conteudo">
       <span class="marca" data-nome-produto>
-        <img class="marca-logo" src="../assets/img/logo.png" alt="" width="32" height="32" onerror="this.hidden = true">
+        <img class="marca-logo" src="../assets/img/logo.png" alt="" width="32" height="32" onerror="console.warn('[marca] não foi possível carregar a logo:', this.getAttribute('src')); this.hidden = true">
         <span class="marca-nome">Pedido na Mão</span>
       </span>
       <div class="topo-acao">
@@ -30,6 +30,9 @@
           <span data-icone="mesa" data-tamanho="16"></span>
           <span id="pilula-mesa-texto"></span>
         </span>
+        <a class="btn btn-fantasma btn-icone" href="historico.html" aria-label="Meus pedidos">
+          <span data-icone="relogio"></span>
+        </a>
         <button type="button" class="btn btn-fantasma btn-icone" id="btn-sair" aria-label="Sair">
           <span data-icone="sair"></span>
         </button>

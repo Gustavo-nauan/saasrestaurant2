@@ -1,0 +1,273 @@
+/* =====================================================================
+   historico.css  |  FASE 3.5  |  Página de histórico de pedidos
+   Depende de: tokens.css, base.css, componentes.css.
+   Só variáveis dos tokens; medidas literais apenas estruturais.
+   ===================================================================== */
+
+/* base.css não define [hidden]. */
+.historico-pagina [hidden] {
+  display: none !important;
+}
+
+.historico-pagina {
+  overflow-x: hidden;
+}
+
+/* ---------------------------------------------------------------------
+   CABEÇALHO
+   --------------------------------------------------------------------- */
+.historico-topo-esquerda {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  min-width: 0;
+}
+
+.historico-topo-titulo {
+  font-size: var(--texto-xl);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------------------------------------------------------------------
+   LAYOUT PRINCIPAL E SEÇÕES
+   --------------------------------------------------------------------- */
+.historico-main {
+  padding-block: var(--esp-5) var(--esp-9);
+}
+
+.historico-listas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-8);
+}
+
+.historico-secao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+}
+
+.historico-secao-titulo {
+  font-size: var(--texto-xl);
+}
+
+.historico-secao-andamento {
+  padding: var(--esp-5);
+  background: var(--cor-primaria-suave);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+}
+
+.historico-secao-andamento .historico-secao-titulo {
+  color: var(--cor-primaria-texto);
+}
+
+.historico-grade {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--esp-4);
+}
+
+/* ---------------------------------------------------------------------
+   CARD DE PEDIDO
+   O card inteiro é clicável via stretched-link (.card-pedido-link::after);
+   o botão "Pedir de novo" fica acima com position: relative e z-index.
+   --------------------------------------------------------------------- */
+.card-pedido {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  padding: var(--esp-5);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+  min-width: 0;
+  transition:
+    box-shadow var(--transicao),
+    border-color var(--transicao),
+    transform var(--transicao);
+}
+
+.card-pedido:hover {
+  box-shadow: var(--sombra-md);
+  border-color: var(--cor-borda-campo);
+  transform: translateY(-2px);
+}
+
+.card-pedido-andamento {
+  border-width: 2px;
+  border-color: var(--cor-primaria);
+  box-shadow: var(--sombra-md);
+}
+
+/* Foco visível no card quando o link principal recebe foco por teclado */
+.card-pedido:has(.card-pedido-link:focus-visible) {
+  outline: 3px solid var(--cor-destaque);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px var(--cor-escuro);
+}
+
+.card-pedido-link:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.card-pedido-topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--esp-3);
+}
+
+.card-pedido-identificacao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+  min-width: 0;
+}
+
+.card-pedido-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--esp-2);
+  color: var(--cor-texto);
+  text-decoration: none;
+}
+
+.card-pedido-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--raio-lg);
+}
+
+.card-pedido-rotulo-senha {
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cor-texto-suave);
+}
+
+.card-pedido-senha {
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-2xl);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--cor-primaria-texto);
+  font-variant-numeric: tabular-nums;
+}
+
+.card-pedido-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-1) var(--esp-2);
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
+
+.card-pedido-restaurante {
+  font-weight: 600;
+  color: var(--cor-texto);
+  overflow-wrap: anywhere;
+}
+
+.card-pedido-itens {
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.card-pedido-rodape {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  margin-top: auto;
+  padding-top: var(--esp-3);
+  border-top: 1px solid var(--cor-borda);
+}
+
+.card-pedido-info-rodape {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-2) var(--esp-4);
+}
+
+.card-pedido-entrega {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+  font-size: var(--texto-sm);
+  font-weight: 500;
+  color: var(--cor-texto-suave);
+}
+
+.card-pedido-total {
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-lg);
+  font-weight: 700;
+  color: var(--cor-texto);
+  font-variant-numeric: tabular-nums;
+}
+
+.card-pedido-refazer {
+  position: relative;
+  z-index: var(--z-base);
+  padding-inline: var(--esp-4);
+  font-size: var(--texto-sm);
+}
+
+/* Botão carregando + desabilitado: mantém o spinner visível */
+.historico-pagina .btn-carregando:disabled {
+  opacity: 1;
+}
+
+/* ---------------------------------------------------------------------
+   PAGINAÇÃO, SKELETON E ESTADOS
+   --------------------------------------------------------------------- */
+.historico-paginacao {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--esp-2);
+}
+
+.historico-skeleton {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--esp-4);
+}
+
+.historico-skeleton-card {
+  height: 168px;
+  border-radius: var(--raio-lg);
+}
+
+.historico-estado .vazio h2 {
+  font-size: var(--texto-xl);
+  color: var(--cor-texto);
+}
+
+/* ---------------------------------------------------------------------
+   TABLET E DESKTOP (>= 768px): 2 colunas de cards
+   --------------------------------------------------------------------- */
+@media (min-width: 768px) {
+  .historico-grade,
+  .historico-skeleton {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
