@@ -719,19 +719,32 @@
 }
 
 .marca-logo {
-  width: auto;
-  height: var(--esp-7); /* 32px nas telas internas */
+  width: var(--esp-7); /* 32px nos cabeçalhos */
+  height: var(--esp-7);
+  min-width: var(--esp-7);
   max-height: var(--esp-7);
-  object-fit: contain;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+  background: none;
+  border: none;
   flex-shrink: 0;
 }
 
-/* 44px na tela de início e nos logins */
+/* 44px na tela de início e no login */
+.inicio-marca .marca .marca-logo,
 .inicio-marca .marca-logo,
-.login-topo .marca-logo,
-.equipe-topo .marca-logo {
+.login-topo .marca .marca-logo,
+.login-topo .marca-logo {
+  width: var(--alvo-toque);
   height: var(--alvo-toque);
+  min-width: var(--alvo-toque);
   max-height: var(--alvo-toque);
+}
+
+/* Fundo opaco branco se funde com o fundo da página nas marcas claras (padrao) */
+.marca[data-marca="padrao"] .marca-logo {
+  mix-blend-mode: multiply;
 }
 
 .marca-logo[hidden] {

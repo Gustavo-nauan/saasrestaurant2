@@ -943,7 +943,7 @@ $("#btn-sair").addEventListener("click", async () => {
     mostrarToast(erro.message || "Erro ao sair.", "erro");
     return;
   }
-  window.location.replace("../equipe/login.html");
+  window.location.replace("../cliente/login.html");
 });
 
 function limparRecursos() {
@@ -997,7 +997,7 @@ async function iniciar() {
   atualizarInterfaceSom();
   atualizarRelogio();
 
-  const funcionario = await exigirFuncionario(["cozinha", "admin"], "../equipe/login.html");
+  const funcionario = await exigirFuncionario(["cozinha", "admin"], "../cliente/login.html");
   if (!funcionario) return;
 
   restauranteId = funcionario.restaurante_id;

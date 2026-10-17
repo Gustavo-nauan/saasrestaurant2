@@ -225,7 +225,32 @@ export async function entrarFuncionario(email, senha) {
 }
 
 /**
- * Página inicial de cada papel. Caminhos relativos a equipe/login.html.
+ * Login unificado (cliente, cozinha e admin).
+ * Autentica primeiro e, SOMENTE depois, consulta a tabela funcionarios
+ * (apenas ativo = true) para descobrir o tipo da conta.
+ * - Se for funcionário ativo: devolve { tipo: "funcionario", papel, restaurante_id, destino }
+ * - Caso contrário: chama garantirPerfil() e devolve { tipo: "cliente", perfilOk }
+ */
+export async function entrarComPapel(email, senha) {
+  await entrarBase(email, senha); // mesma mensagem de erro para qualquer conta
+
+  const funcionario = await obterFuncionario();
+  if (funcionario) {
+    return {
+      tipo: "funcionario",
+      papel: funcionario.papel,
+      restaurante_id: funcionario.restaurante_id,
+      destino: destinoPorPapel(funcionario.papel),
+    };
+  }
+
+  const perfilOk = await garantirPerfil();
+  return { tipo: "cliente", perfilOk };
+}
+
+/**
+ * Página inicial de cada papel. Caminhos relativos às pastas de 1º nível
+ * (cliente/, cozinha/, admin/, equipe/).
  * Devolve null para papel desconhecido (a tela decide o que fazer).
  */
 export function destinoPorPapel(papel) {
@@ -245,13 +270,22 @@ export function destinoPorPapel(papel) {
    --------------------------------------------------------------------- */
 
 /**
- * Exige sessão E linha em perfis_clientes. Contas de funcionário não têm
- * perfil de cliente, então são barradas aqui. Devolve a sessão ou redireciona.
+ * Exige sessão E linha em perfis_clientes.
+ * Se a sessão ativa for de um funcionário, redireciona para o destino
+ * do papel dele em vez de mandar ao login, evitando loops.
+ * Devolve a sessão ou redireciona.
  */
 export async function exigirCliente(redirecionarPara = "../cliente/login.html") {
   const sessao = await obterSessao();
   if (!sessao) {
     window.location.replace(redirecionarPara);
+    return null;
+  }
+
+  const funcionario = await obterFuncionario();
+  if (funcionario) {
+    const destino = destinoPorPapel(funcionario.papel);
+    window.location.replace(destino || redirecionarPara);
     return null;
   }
 
@@ -269,12 +303,37 @@ export async function exigirCliente(redirecionarPara = "../cliente/login.html") 
   return sessao;
 }
 
-/** Exige funcionário ativo com um dos papéis. Devolve {papel, restaurante_id} ou redireciona. */
-export async function exigirFuncionario(papelsPermitidos = ["cozinha", "admin"], redirecionarPara = "../equipe/login.html") {
-  const funcionario = await obterFuncionario();
-  if (!funcionario || !papelsPermitidos.includes(funcionario.papel)) {
+/**
+ * Exige funcionário ativo com um dos papéis permitidos.
+ * - Sem sessão: redireciona para redirecionarPara ("../cliente/login.html").
+ * - Funcionário ativo com outro papel (ex.: cozinha tentando abrir admin):
+ *   redireciona para o destino do papel dele.
+ * - Cliente logado tentando abrir área interna: redireciona ao cardápio.
+ * Devolve {papel, restaurante_id} ou redireciona.
+ */
+export async function exigirFuncionario(
+  papelsPermitidos = ["cozinha", "admin"],
+  redirecionarPara = "../cliente/login.html"
+) {
+  const sessao = await obterSessao();
+  if (!sessao) {
     window.location.replace(redirecionarPara);
     return null;
   }
+
+  const funcionario = await obterFuncionario();
+  if (!funcionario) {
+    const ehCliente = await garantirPerfil();
+    window.location.replace(ehCliente ? "../cliente/cardapio.html" : redirecionarPara);
+    return null;
+  }
+
+  if (!papelsPermitidos.includes(funcionario.papel)) {
+    const destino = destinoPorPapel(funcionario.papel);
+    window.location.replace(destino || redirecionarPara);
+    return null;
+  }
+
   return funcionario;
 }
+

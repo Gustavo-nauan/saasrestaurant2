@@ -4,65 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Acesso da equipe | Pedido na Mão</title>
-  <meta name="theme-color" content="#3B2A21">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap">
-
-  <link rel="stylesheet" href="../css/tokens.css">
-  <link rel="stylesheet" href="../css/base.css">
-  <link rel="stylesheet" href="../css/componentes.css">
-  <link rel="stylesheet" href="../css/equipe.css">
+  <meta http-equiv="refresh" content="0; url=../cliente/login.html">
+  <title>Redirecionando | Pedido na Mão</title>
+  <script>
+    window.location.replace("../cliente/login.html");
+  </script>
 </head>
-<body class="tema-painel equipe-login-pagina">
-  <header class="equipe-topo">
-    <span class="marca" data-marca="clara"></span>
-  </header>
-
-  <main class="equipe-main">
-    <section class="equipe-cartao" aria-labelledby="equipe-titulo">
-      <h1 class="equipe-titulo" id="equipe-titulo">Acesso da equipe</h1>
-      <p class="equipe-subtitulo">Acesso exclusivo para funcionários.</p>
-
-      <div class="equipe-aviso" id="aviso" role="alert" hidden>
-        <span class="equipe-aviso-icone" data-icone="alerta" data-tamanho="20"></span>
-        <span class="equipe-aviso-texto" id="aviso-texto"></span>
-      </div>
-
-      <form class="equipe-form" id="form-equipe" novalidate>
-        <div class="campo">
-          <label for="equipe-email">E-mail</label>
-          <input type="email" id="equipe-email" name="email" data-validar="email"
-                 autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false"
-                 placeholder="equipe@restaurante.com" aria-describedby="equipe-email-erro">
-          <p class="campo-mensagem-erro" id="equipe-email-erro">
-            <span class="msg-icone" data-icone="alerta" data-tamanho="16"></span>
-            <span class="msg-texto"></span>
-          </p>
-        </div>
-
-        <div class="campo">
-          <label for="equipe-senha">Senha</label>
-          <div class="campo-senha">
-            <input type="password" id="equipe-senha" name="senha" data-validar="senha"
-                   autocomplete="current-password" aria-describedby="equipe-senha-erro">
-            <button type="button" class="btn btn-fantasma btn-icone campo-senha-botao"
-                    id="btn-alternar-senha" aria-label="Mostrar senha" aria-pressed="false"></button>
-          </div>
-          <p class="campo-mensagem-erro" id="equipe-senha-erro">
-            <span class="msg-icone" data-icone="alerta" data-tamanho="16"></span>
-            <span class="msg-texto"></span>
-          </p>
-        </div>
-
-        <button type="submit" class="btn btn-primario btn-bloco" id="btn-entrar">Entrar</button>
-      </form>
-    </section>
-  </main>
-
-  <script type="module" src="../js/marca.js"></script>
-  <script type="module" src="login.js"></script>
+<body>
+  <p><a href="../cliente/login.html">Continuar</a></p>
 </body>
 </html>

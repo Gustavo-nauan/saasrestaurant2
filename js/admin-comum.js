@@ -63,7 +63,7 @@ export function comIcone(el, nome, tamanho = 20) {
 /**
  * Verifica se há funcionário ativo logado:
  * - Se for "cozinha", redireciona para ../cozinha/painel.html.
- * - Caso contrário, exige papel "admin" via exigirFuncionario(["admin"], "../equipe/login.html").
+ * - Caso contrário, exige papel "admin" via exigirFuncionario(["admin"], "../cliente/login.html").
  * - Busca nome do funcionário e nome do restaurante e monta a navegação comum.
  *
  * @param {"produtos" | "categorias"} paginaAtiva
@@ -78,7 +78,7 @@ export async function iniciarAdmin(paginaAtiva) {
     return null;
   }
 
-  const funcionario = await exigirFuncionario(["admin"], "../equipe/login.html");
+  const funcionario = await exigirFuncionario(["admin"], "../cliente/login.html");
   if (!funcionario) return null;
 
   let nomeFuncionario = "Administrador";
@@ -165,7 +165,7 @@ function montarNavegacaoAdmin(paginaAtiva, { nomeFuncionario, nomeRestaurante })
     } catch (erro) {
       console.error("[admin] erro ao sair:", erro);
     }
-    window.location.replace("../equipe/login.html");
+    window.location.replace("../cliente/login.html");
   });
 
   rodapeConta.append(infoUsuario, btnSair);
@@ -298,3 +298,4 @@ export async function removerFotoAntigaSilencioso(imagemUrl, restauranteId) {
     console.warn("[admin] falha ignorada ao remover foto antiga:", erro);
   }
 }
+

@@ -34,11 +34,12 @@ export function montarBlocoMarca(el) {
   const variante = el.getAttribute("data-marca") === "clara" ? "clara" : "padrao";
   el.classList.add("marca");
 
+  const tamanho = el.closest(".inicio-marca, .login-topo") ? 44 : 32;
   const img = document.createElement("img");
   img.className = "marca-logo";
   img.alt = "";
-  img.width = 32;
-  img.height = 32;
+  img.width = tamanho;
+  img.height = tamanho;
   img.decoding = "async";
 
   let tentouFallbackPadrao = false;
@@ -89,3 +90,4 @@ export function inicializarMarca(raiz = document) {
 }
 
 inicializarMarca();
+

@@ -12,8 +12,8 @@ import { mostrarToast, getParametro } from "../js/utils.js";
    Constantes
    --------------------------------------------------------------------- */
 const DESTINO_PADRAO = "cardapio.html"; // relativo a cliente/login.html
-const MSG_NAO_CLIENTE =
-  "Esta conta não é de cliente. Entre com uma conta de cliente ou crie uma nova.";
+const MSG_CONTA_INATIVA =
+  "Esta conta não está ativa. Fale com o restaurante.";
 const MSG_FALHA_CARGA =
   "Não foi possível carregar o serviço de acesso. Verifique sua internet e recarregue a página.";
 
@@ -297,26 +297,37 @@ async function enviar(form, acao) {
   }
 }
 
-/** Conta sem perfil de cliente: encerra a sessão para não gerar loop. */
-async function rejeitarContaNaoCliente(auth) {
+/** Conta sem perfil ativo: encerra a sessão para não gerar loop. */
+async function rejeitarContaInativa(auth) {
   try {
     await auth.sair();
   } catch (erro) {
     console.error("[login]", erro);
   }
-  mostrarAviso(MSG_NAO_CLIENTE, "info");
+  mostrarAviso(MSG_CONTA_INATIVA, "info");
 }
 
 $("#form-entrar").addEventListener("submit", (e) => {
   e.preventDefault();
   enviar(e.currentTarget, async () => {
     const auth = await carregarAuth();
-    const { perfilOk } = await auth.entrar($("#entrar-email").value, $("#entrar-senha").value);
-    if (perfilOk) {
-      irParaDestino();
-    } else {
-      await rejeitarContaNaoCliente(auth);
+    const resultado = await auth.entrarComPapel(
+      $("#entrar-email").value,
+      $("#entrar-senha").value
+    );
+
+    if (resultado.tipo === "funcionario" && resultado.destino) {
+      redirecionando = true;
+      window.location.replace(resultado.destino);
+      return;
     }
+
+    if (resultado.tipo === "cliente" && resultado.perfilOk) {
+      irParaDestino();
+      return;
+    }
+
+    await rejeitarContaInativa(auth);
   });
 });
 
@@ -379,17 +390,28 @@ $$("[data-icone]").forEach((el) => {
 // ?modo=cadastro abre direto em "Criar conta" (sem mover o foco)
 selecionarModo(getParametro("modo") === "cadastro" ? "cadastro" : "entrar");
 
-// Sessão já existente: segue direto, ou sai se a conta não for de cliente.
+// Sessão já existente: se for funcionário ativo, vai para o destino do papel;
+// se for cliente com perfil, segue para o destino do cliente; senão encerra.
 (async function verificarSessaoExistente() {
   try {
     const auth = await carregarAuth();
     const sessao = await auth.obterSessao();
     if (!sessao) return;
 
+    const funcionario = await auth.obterFuncionario();
+    if (funcionario) {
+      const destino = auth.destinoPorPapel(funcionario.papel);
+      if (destino) {
+        redirecionando = true;
+        window.location.replace(destino);
+        return;
+      }
+    }
+
     if (await auth.garantirPerfil()) {
       irParaDestino();
     } else {
-      await rejeitarContaNaoCliente(auth);
+      await rejeitarContaInativa(auth);
     }
   } catch (erro) {
     console.warn("[login] verificação de sessão ignorada:", erro);

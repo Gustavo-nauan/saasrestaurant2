@@ -9,3 +9,4 @@
 7. **Escopo das tarefas.** Não alterar arquivos fora da lista permitida de cada tarefa. Se for necessário, avisar no resumo em vez de alterar.
 8. **Acessibilidade.** Contraste AA, foco visível, alvos de toque de no mínimo 44px e respeito a `prefers-reduced-motion`.
 9. **Marca.** A marca é a imagem `assets/img/logo.png` (versão clara opcional em `assets/img/logo-branca.png`) ao lado do texto Pedido na Mão. Nunca usar emoji ou ícone improvisado como logo.
+10. **Login único.** Login único em `cliente/login.html` para cliente, cozinha e admin. O tipo da conta é definido SOMENTE pela tabela `funcionarios` depois da autenticação, nunca pelo texto do e-mail. Nenhuma tela do cliente pode ter link para cozinha ou admin. A proteção real é o RLS do banco; os guardas das páginas servem só para navegação.
