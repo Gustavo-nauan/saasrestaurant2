@@ -166,18 +166,10 @@ abasContainer.addEventListener("keydown", (e) => {
 const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const SENHA_MIN = 6;
 
-function apenasDigitos(texto) {
-  return texto.replace(/\D/g, "");
-}
-
 const VALIDADORES = {
   nome(valor) {
     const letras = (valor.match(/\p{L}/gu) || []).length;
     return letras >= 2 ? "" : "Digite seu nome (pelo menos 2 letras).";
-  },
-  telefone(valor) {
-    const n = apenasDigitos(valor).length;
-    return n === 10 || n === 11 ? "" : "Digite um telefone com DDD, por exemplo (11) 91234-5678.";
   },
   email(valor) {
     return REGEX_EMAIL.test(valor.trim()) ? "" : "Digite um e-mail válido, como voce@email.com.";
@@ -229,32 +221,6 @@ $$("[data-validar]").forEach((input) => {
   input.addEventListener("input", () => {
     if (input.closest(".campo").classList.contains("campo-erro")) validarCampo(input);
   });
-});
-
-/* ---------------------------------------------------------------------
-   Telefone: máscara (00) 00000-0000
-   Recalcula tudo a partir dos dígitos; trata o backspace sobre a
-   pontuação (senão ela seria recolocada e o cursor "travaria").
-   --------------------------------------------------------------------- */
-function mascararTelefone(digitos) {
-  const d = digitos.slice(0, 11);
-  if (d.length === 0) return "";
-  if (d.length <= 2) return `(${d}`;
-  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
-  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
-  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
-}
-
-const campoTelefone = $("#cad-telefone");
-let digitosAnteriores = "";
-campoTelefone.addEventListener("input", (e) => {
-  let digitos = apenasDigitos(campoTelefone.value);
-  if (e.inputType === "deleteContentBackward" && digitos === digitosAnteriores) {
-    digitos = digitos.slice(0, -1); // apagou só a pontuação: apaga o dígito anterior
-  }
-  digitos = digitos.slice(0, 11);
-  campoTelefone.value = mascararTelefone(digitos);
-  digitosAnteriores = digitos;
 });
 
 /* ---------------------------------------------------------------------
@@ -362,7 +328,6 @@ $("#form-cadastro").addEventListener("submit", (e) => {
     const resultado = await auth.cadastrarCliente({
       nome: $("#cad-nome").value,
       email,
-      telefone: $("#cad-telefone").value,
       senha: $("#cad-senha").value,
     });
 

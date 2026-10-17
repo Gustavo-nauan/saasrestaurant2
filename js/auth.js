@@ -63,12 +63,12 @@ function falhar(erro) {
    --------------------------------------------------------------------- */
 
 /**
- * Cria a conta. Nome e telefone vão em user_metadata: assim, mesmo quando o
- * perfil ainda não pode ser gravado (confirmação de e-mail ligada), os dados
- * não se perdem — garantirPerfil() os usa no primeiro login.
+ * Cria a conta. O nome vai em user_metadata: assim, mesmo quando o
+ * perfil ainda não pode ser gravado (confirmação de e-mail ligada), o dado
+ * não se perde — garantirPerfil() o usa no primeiro login.
  * Devolve {sessaoCriada: true} ou {sessaoCriada: false, precisaConfirmarEmail: true}.
  */
-export async function cadastrarCliente({ nome, email, telefone, senha }) {
+export async function cadastrarCliente({ nome, email, senha }) {
   try {
     const { data, error } = await supabase.auth.signUp({
       email: String(email).trim(),
@@ -76,7 +76,6 @@ export async function cadastrarCliente({ nome, email, telefone, senha }) {
       options: {
         data: {
           nome: String(nome).trim(),
-          telefone: telefone ? String(telefone).trim() : null,
         },
       },
     });
@@ -147,10 +146,10 @@ export async function garantirPerfil() {
     const nome = String(meta.nome ?? "").trim();
     if (!nome) return false;
 
+    // Telefone não é coletado: a coluna fica nula (ver SQL/06_telefone_opcional.sql).
     const { error: erroCriar } = await supabase.from("perfis_clientes").upsert({
       id: usuario.id,
       nome,
-      telefone: meta.telefone ? String(meta.telefone).trim() : null,
     });
     if (erroCriar) throw erroCriar;
     return true;

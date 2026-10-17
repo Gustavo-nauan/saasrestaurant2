@@ -1,0 +1,436 @@
+/* =====================================================================
+   cardapio.css  |  FASE 3.2  |  Página do cardápio
+   Depende de: tokens.css, base.css, componentes.css.
+   Só variáveis dos tokens; medidas literais apenas estruturais
+   (alvo de toque de 44px, alturas de barra).
+   ===================================================================== */
+
+/* base.css não define [hidden]; sem isto, classes com display próprio
+   ignorariam o atributo. */
+.cardapio-pagina [hidden] {
+  display: none !important;
+}
+
+.cardapio-pagina {
+  /* Atualizada por cardapio.js com a altura real da barra de categorias. */
+  --altura-barra: 64px;
+}
+
+/* ---------------------------------------------------------------------
+   CABEÇALHO (rola junto com a página; só a barra de categorias fixa)
+   --------------------------------------------------------------------- */
+.cardapio-topo {
+  position: static;
+  border-bottom: 0;
+}
+
+.cardapio-saudacao {
+  padding-bottom: var(--esp-2);
+}
+
+.cardapio-saudacao h1 {
+  font-size: var(--texto-2xl);
+  overflow-wrap: anywhere;
+}
+
+.cardapio-saudacao p {
+  min-height: 1.55em;
+  color: var(--cor-texto-suave);
+}
+
+.pilula-mesa {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: var(--esp-1) var(--esp-3);
+  border-radius: var(--raio-pill);
+  background: var(--cor-primaria-suave);
+  color: var(--cor-primaria-texto);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------
+   BUSCA
+   --------------------------------------------------------------------- */
+.cardapio-busca-area {
+  padding-block: var(--esp-2) var(--esp-4);
+}
+
+.busca-caixa {
+  position: relative;
+}
+
+.busca-icone {
+  position: absolute;
+  inset-block: 0;
+  left: var(--esp-4);
+  display: flex;
+  align-items: center;
+  color: var(--cor-texto-suave);
+  pointer-events: none;
+}
+
+.campo-busca input {
+  padding-left: var(--esp-9);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ---------------------------------------------------------------------
+   BARRA DE CATEGORIAS (sticky)
+   --------------------------------------------------------------------- */
+.cardapio-barra {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-topo);
+  padding-block: var(--esp-2);
+  background: var(--cor-fundo);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+/* O anel de foco (com halo) seria cortado pelo overflow dos chips:
+   folga interna + margem negativa para manter o alinhamento. */
+.cardapio-chips {
+  padding: var(--esp-2);
+  margin: calc(var(--esp-2) * -1);
+  scroll-behavior: smooth;
+}
+
+/* ---------------------------------------------------------------------
+   LISTA
+   --------------------------------------------------------------------- */
+.cardapio-main {
+  padding-block: var(--esp-4) var(--esp-9);
+}
+
+.cardapio-pagina.tem-carrinho .cardapio-main {
+  /* Espaço para a barra do carrinho não esconder o último item. */
+  padding-bottom: calc(var(--esp-12) + var(--esp-7) + env(safe-area-inset-bottom, 0px));
+}
+
+.cardapio-secao {
+  scroll-margin-top: calc(var(--altura-barra) + var(--esp-2));
+}
+
+.cardapio-secao + .cardapio-secao {
+  margin-top: var(--esp-7);
+}
+
+.cardapio-secao-titulo {
+  margin-bottom: var(--esp-4);
+  font-size: var(--texto-2xl);
+}
+
+.cardapio-lista {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--esp-4);
+}
+
+/* Footer ocupa a largura toda: preço à esquerda, controle à direita.
+   (Com a foto de 104px, o espaço ao lado dela é pequeno demais.) */
+.cardapio-pagina .card-produto {
+  grid-template-areas:
+    "corpo imagem"
+    "rodape rodape";
+  min-width: 0;
+}
+
+.card-produto-nome {
+  margin: 0;
+  font-size: var(--texto-lg);
+}
+
+/* Nome é um botão (acessível por teclado) com cara de título. */
+.card-produto-abrir {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.card-produto-abrir:hover {
+  color: var(--cor-primaria-texto);
+}
+
+.card-produto[data-abrir] {
+  cursor: pointer;
+}
+
+.card-produto-preco {
+  color: var(--cor-primaria-texto);
+}
+
+.card-produto-imagem {
+  position: relative;
+}
+
+.card-produto-imagem.sem-imagem {
+  display: grid;
+  place-items: center;
+  color: var(--cor-primaria-texto);
+}
+
+.card-produto-esgotado .card-produto-corpo,
+.card-produto-esgotado .card-produto-imagem {
+  opacity: 0.55;
+}
+
+.card-produto-esgotado {
+  cursor: default !important;
+}
+
+.card-produto-controle {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+}
+
+.card-produto-add:disabled {
+  background: var(--cor-borda);
+  color: var(--cor-texto-suave);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* ---------------------------------------------------------------------
+   SELETOR  −  qtd  +
+   --------------------------------------------------------------------- */
+.seletor {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+  padding: var(--esp-1);
+  border-radius: var(--raio-pill);
+  background: var(--cor-primaria-suave);
+}
+
+.seletor button {
+  display: grid;
+  place-items: center;
+  width: var(--alvo-toque);
+  height: var(--alvo-toque);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--cor-superficie);
+  color: var(--cor-primaria-texto);
+  box-shadow: var(--sombra-sm);
+  transition: background-color var(--transicao-rapida), transform var(--transicao-rapida);
+}
+
+.seletor button:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.seletor button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.seletor .seletor-mais {
+  background: var(--cor-primaria);
+  color: var(--cor-sobre-primaria);
+}
+
+.seletor-qtd {
+  min-width: 2.25em;
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------
+   ESTADOS (vazio / erro / skeleton)
+   --------------------------------------------------------------------- */
+.cardapio-estado {
+  margin-top: var(--esp-6);
+}
+
+.cardapio-estado .vazio h3 {
+  font-size: var(--texto-xl);
+}
+
+.card-skeleton {
+  box-shadow: none;
+}
+
+.card-skeleton:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.card-skeleton .skeleton-bloco {
+  grid-area: imagem;
+  width: 104px;
+}
+
+/* ---------------------------------------------------------------------
+   BARRA DO CARRINHO (rodapé)
+   --------------------------------------------------------------------- */
+.carrinho-fundo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: var(--z-topo);
+  display: flex;
+  justify-content: center;
+  padding: var(--esp-3) var(--container-pad)
+    calc(var(--esp-3) + env(safe-area-inset-bottom, 0px));
+  pointer-events: none; /* só o botão captura toques */
+  animation: carrinho-subir var(--transicao) both;
+}
+
+.carrinho-barra {
+  width: 100%;
+  max-width: 640px;
+  min-height: 56px;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  padding: var(--esp-3) var(--esp-5);
+  box-shadow: var(--sombra-lg);
+  pointer-events: auto;
+}
+
+.carrinho-barra-texto {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.carrinho-barra-total {
+  flex-shrink: 0;
+}
+
+@keyframes carrinho-subir {
+  from { opacity: 0; transform: translateY(100%); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Toasts sobem para não ficarem atrás da barra do carrinho. */
+.cardapio-pagina.tem-carrinho .toasts {
+  bottom: calc(var(--esp-12) + env(safe-area-inset-bottom, 0px));
+}
+
+/* ---------------------------------------------------------------------
+   DETALHE DO PRODUTO (usa .sobreposicao + .sheet de componentes.css)
+   --------------------------------------------------------------------- */
+body.detalhe-aberto {
+  overflow: hidden;
+}
+
+.detalhe {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.detalhe-imagem {
+  position: relative;
+  flex-shrink: 0;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--raio-md);
+  background: linear-gradient(135deg, var(--cor-destaque-suave), var(--cor-primaria-suave));
+  display: grid;
+  place-items: center;
+  color: var(--cor-primaria-texto);
+}
+
+.detalhe-imagem img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.detalhe-fechar {
+  position: absolute;
+  top: var(--esp-2);
+  right: var(--esp-2);
+  z-index: var(--z-base);
+  background: var(--cor-superficie);
+  border-color: var(--cor-superficie);
+  color: var(--cor-texto);
+  box-shadow: var(--sombra-md);
+}
+
+.detalhe-nome {
+  font-size: var(--texto-2xl);
+  overflow-wrap: anywhere;
+}
+
+.detalhe-descricao {
+  color: var(--cor-texto-suave);
+  overflow-wrap: anywhere;
+}
+
+.detalhe-preco {
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-xl);
+  font-weight: 700;
+  color: var(--cor-primaria-texto);
+}
+
+.detalhe-contador {
+  text-align: right;
+}
+
+.detalhe-acoes {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  margin-top: var(--esp-2);
+}
+
+.detalhe-adicionar {
+  flex: 1;
+  min-width: 0;
+  padding-inline: var(--esp-3);
+  font-size: var(--texto-base);
+}
+
+/* ---------------------------------------------------------------------
+   TABLET (>= 768px): 2 colunas; detalhe vira modal centralizado
+   --------------------------------------------------------------------- */
+@media (min-width: 768px) {
+  .cardapio-lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cardapio-pagina .sobreposicao-sheet {
+    align-items: center;
+    padding: var(--esp-4);
+  }
+
+  .detalhe.sheet {
+    max-width: 480px;
+    border-radius: var(--raio-lg);
+    transform: translateY(12px) scale(0.98);
+  }
+
+  .detalhe.sheet::before {
+    display: none;
+  }
+
+  .cardapio-pagina .sobreposicao.aberto .detalhe.sheet {
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   DESKTOP (>= 1024px): 3 colunas
+   --------------------------------------------------------------------- */
+@media (min-width: 1024px) {
+  .cardapio-lista {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
