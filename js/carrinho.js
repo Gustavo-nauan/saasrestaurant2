@@ -122,6 +122,33 @@ export function limpar(restauranteId) {
   salvar(restauranteId, []);
 }
 
+/** Atualiza a observação do item (texto limpo, máximo 140 caracteres). */
+export function alterarObservacao(restauranteId, produtoId, observacao) {
+  const itens = obter(restauranteId);
+  const item = itens.find((i) => i.produtoId === produtoId);
+  if (!item) return;
+  item.observacao = String(observacao ?? "")
+    .replace(/[\u0000-\u001f\u007f]/g, " ") // sem caracteres de controle
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, OBS_MAXIMA);
+  salvar(restauranteId, itens);
+}
+
+/**
+ * Corrige o preço de EXIBIÇÃO de um item (ex.: o preço mudou no cardápio).
+ * Continua sendo só exibição: o servidor recalcula no pedido.
+ */
+export function atualizarPrecoExibicao(restauranteId, produtoId, novoPrecoCentavos) {
+  const preco = Number(novoPrecoCentavos);
+  if (!Number.isInteger(preco) || preco < 0) return;
+  const itens = obter(restauranteId);
+  const item = itens.find((i) => i.produtoId === produtoId);
+  if (!item || item.precoCentavos === preco) return;
+  item.precoCentavos = preco;
+  salvar(restauranteId, itens);
+}
+
 export function quantidadeTotal(restauranteId) {
   return obter(restauranteId).reduce((soma, i) => soma + i.quantidade, 0);
 }

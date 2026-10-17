@@ -10,7 +10,7 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
    ║    - Project URL          -> SUPABASE_URL                         ║
    ║    - anon / public key    -> SUPABASE_ANON_KEY                    ║
    ║                                                                   ║
-   ║  ⚠ NUNCA coloque a chave "service_role" neste projeto.            ║
+   ║  ! NUNCA coloque a chave "service_role" neste projeto.            ║
    ║    Ela ignora o RLS e dá acesso TOTAL ao banco. Como este código  ║
    ║    roda no navegador, qualquer pessoa poderia lê-la.              ║
    ║    A anon key é pública por design: quem protege os dados é o RLS.║

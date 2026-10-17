@@ -1,0 +1,541 @@
+/* =====================================================================
+   carrinho.css  |  FASE 3.3  |  Página do carrinho
+   Depende de: tokens.css, base.css, componentes.css.
+   Só variáveis dos tokens; medidas literais apenas estruturais
+   (alvo de toque de 44px, alturas de miniatura).
+   ===================================================================== */
+
+/* base.css não define [hidden]. */
+.carrinho-pagina [hidden] {
+  display: none !important;
+}
+
+/* ---------------------------------------------------------------------
+   CABEÇALHO
+   --------------------------------------------------------------------- */
+.carrinho-topo-titulo {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  min-width: 0;
+}
+
+.carrinho-topo-textos {
+  min-width: 0;
+}
+
+.carrinho-topo-textos h1 {
+  font-size: var(--texto-xl);
+  line-height: 1.2;
+}
+
+.carrinho-topo-textos p {
+  min-height: 1.4em;
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------
+   CONTEÚDO
+   --------------------------------------------------------------------- */
+.carrinho-main {
+  padding-block: var(--esp-5) var(--esp-9);
+}
+
+.carrinho-pagina.tem-barra .carrinho-main {
+  /* Espaço para a barra fixa não esconder o fim da página (só no celular). */
+  padding-bottom: calc(var(--esp-12) + var(--esp-7) + env(safe-area-inset-bottom, 0px));
+}
+
+.carrinho-secao-titulo {
+  margin-bottom: var(--esp-3);
+  font-size: var(--texto-xl);
+}
+
+.carrinho-coluna {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-7);
+  min-width: 0;
+}
+
+.carrinho-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-7);
+}
+
+.carrinho-contador {
+  text-align: right;
+}
+
+/* ---------------------------------------------------------------------
+   AVISOS
+   --------------------------------------------------------------------- */
+.carrinho-avisos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.carrinho-avisos:not(:empty) {
+  margin-bottom: var(--esp-5);
+}
+
+.aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-3);
+  padding: var(--esp-3) var(--esp-4);
+  border-radius: var(--raio-md);
+  background: var(--cor-destaque-suave);
+  color: var(--cor-texto);
+  font-size: var(--texto-sm);
+  font-weight: 500;
+}
+
+.aviso-erro {
+  background: var(--status-cancelado-suave);
+  color: var(--status-cancelado-texto);
+}
+
+.aviso-icone {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.aviso-texto {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------------------
+   ESTADOS (vazio / erro / carregando)
+   --------------------------------------------------------------------- */
+.carrinho-estado .vazio h2 {
+  font-size: var(--texto-xl);
+}
+
+.carrinho-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+}
+
+.carrinho-skeleton .skeleton-bloco {
+  height: 148px;
+  border-radius: var(--raio-lg);
+}
+
+/* ---------------------------------------------------------------------
+   ITENS
+   --------------------------------------------------------------------- */
+.carrinho-lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  padding: var(--esp-4);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+  min-width: 0;
+}
+
+.item-topo {
+  display: flex;
+  gap: var(--esp-3);
+  min-width: 0;
+}
+
+.item-miniatura {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  border-radius: var(--raio-md);
+  background: linear-gradient(135deg, var(--cor-destaque-suave), var(--cor-primaria-suave));
+}
+
+.item-miniatura img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.item-miniatura.sem-imagem {
+  display: grid;
+  place-items: center;
+  color: var(--cor-primaria-texto);
+}
+
+.item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-nome {
+  font-size: var(--texto-lg);
+  overflow-wrap: anywhere;
+}
+
+.item-preco {
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
+
+.item-obs {
+  margin-top: var(--esp-1);
+  font-size: var(--texto-sm);
+  color: var(--cor-texto);
+  overflow-wrap: anywhere;
+}
+
+.item-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alvo-toque);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cor-primaria-texto);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.item-rodape {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+}
+
+.item-subtotal {
+  margin-left: auto;
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-lg);
+  font-weight: 700;
+  color: var(--cor-primaria-texto);
+  white-space: nowrap;
+}
+
+.item-remover {
+  flex-shrink: 0;
+  color: var(--cor-texto-suave);
+}
+
+.item-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+.item-editor-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+}
+
+/* Seletor  -  qtd  +  (versão local desta página) */
+.seletor {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+  padding: var(--esp-1);
+  border-radius: var(--raio-pill);
+  background: var(--cor-primaria-suave);
+}
+
+.seletor button {
+  display: grid;
+  place-items: center;
+  width: var(--alvo-toque);
+  height: var(--alvo-toque);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--cor-superficie);
+  color: var(--cor-primaria-texto);
+  box-shadow: var(--sombra-sm);
+  transition: transform var(--transicao-rapida);
+}
+
+.seletor button:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.seletor button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.seletor .seletor-mais {
+  background: var(--cor-primaria);
+  color: var(--cor-sobre-primaria);
+}
+
+.seletor-qtd {
+  min-width: 2.25em;
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------
+   COMO RECEBER (radio group com cartões)
+   --------------------------------------------------------------------- */
+.opcoes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--esp-3);
+}
+
+.opcao {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  min-height: 64px;
+  padding: var(--esp-3) var(--esp-4);
+  background: var(--cor-superficie);
+  border: 2px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  cursor: pointer;
+  transition:
+    border-color var(--transicao-rapida),
+    background-color var(--transicao-rapida);
+}
+
+.opcao:hover {
+  border-color: var(--cor-primaria-texto);
+}
+
+/* O rádio nativo fica invisível mas focável: setas do teclado funcionam. */
+.opcao input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.opcao-icone {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--alvo-toque);
+  height: var(--alvo-toque);
+  border-radius: 50%;
+  background: var(--cor-primaria-suave);
+  color: var(--cor-primaria-texto);
+}
+
+.opcao-texto {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.opcao-titulo {
+  font-weight: 600;
+}
+
+.opcao-apoio {
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
+
+.opcao:has(input:checked) {
+  border-color: var(--cor-primaria);
+  background: var(--cor-primaria-suave);
+}
+
+.opcao:has(input:checked) .opcao-icone {
+  background: var(--cor-primaria);
+  color: var(--cor-sobre-primaria);
+}
+
+.opcao:has(input:focus-visible) {
+  outline: 3px solid var(--cor-destaque);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px var(--cor-escuro);
+}
+
+.carrinho-mesa {
+  margin-top: var(--esp-4);
+}
+
+/* ---------------------------------------------------------------------
+   RESUMO
+   --------------------------------------------------------------------- */
+.carrinho-resumo {
+  padding: var(--esp-5);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+}
+
+.resumo-linhas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  margin: 0;
+}
+
+.resumo-linha {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--esp-3);
+}
+
+.resumo-linha dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.resumo-total {
+  padding-top: var(--esp-3);
+  border-top: 1px solid var(--cor-borda);
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-xl);
+  font-weight: 700;
+}
+
+.resumo-total dd {
+  color: var(--cor-primaria-texto);
+}
+
+.resumo-aviso {
+  margin-top: var(--esp-3);
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
+
+/* No celular o botão do resumo some: quem confirma é a barra fixa. */
+.resumo-botao {
+  display: none;
+  margin-top: var(--esp-4);
+}
+
+/* Botão carregando + desabilitado: o spinner não pode ficar apagado. */
+.carrinho-pagina .btn-carregando:disabled {
+  opacity: 1;
+}
+
+/* ---------------------------------------------------------------------
+   BARRA FIXA (celular/tablet)
+   --------------------------------------------------------------------- */
+.rodape-fundo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: var(--z-topo);
+  padding: var(--esp-3) var(--container-pad)
+    calc(var(--esp-3) + env(safe-area-inset-bottom, 0px));
+  background: var(--cor-superficie);
+  border-top: 1px solid var(--cor-borda);
+  box-shadow: var(--sombra-lg);
+  animation: rodape-subir var(--transicao) both;
+}
+
+.rodape-barra {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-4);
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+.rodape-total {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+
+.rodape-total-rotulo {
+  font-size: var(--texto-sm);
+  color: var(--cor-texto-suave);
+}
+
+.rodape-total strong {
+  font-family: var(--fonte-titulo);
+  font-size: var(--texto-xl);
+  color: var(--cor-primaria-texto);
+}
+
+.rodape-barra .btn {
+  flex: 1;
+  min-width: 0;
+  padding-inline: var(--esp-4);
+  font-size: var(--texto-base);
+}
+
+@keyframes rodape-subir {
+  from { opacity: 0; transform: translateY(100%); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Toasts sobem para não ficarem atrás da barra. */
+.carrinho-pagina.tem-barra .toasts {
+  bottom: calc(var(--esp-12) + env(safe-area-inset-bottom, 0px));
+}
+
+/* ---------------------------------------------------------------------
+   TABLET (>= 768px)
+   --------------------------------------------------------------------- */
+@media (min-width: 768px) {
+  .opcoes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ---------------------------------------------------------------------
+   DESKTOP (>= 1024px): itens à esquerda, resumo fixo à direita
+   --------------------------------------------------------------------- */
+@media (min-width: 1024px) {
+  .carrinho-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    align-items: start;
+    gap: var(--esp-7);
+  }
+
+  .carrinho-resumo {
+    position: sticky;
+    top: calc(var(--esp-12) + var(--esp-4));
+  }
+
+  .resumo-botao {
+    display: flex;
+  }
+
+  .rodape-fundo {
+    display: none !important;
+  }
+
+  .carrinho-pagina.tem-barra .carrinho-main {
+    padding-bottom: var(--esp-9);
+  }
+
+  .carrinho-pagina.tem-barra .toasts {
+    bottom: var(--esp-4);
+  }
+}
