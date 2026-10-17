@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Produtos | Administração</title>
+  <meta name="theme-color" content="#FFF8F0">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap">
+
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/componentes.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-pagina">
+  <div class="admin-layout">
+    <!-- Barra lateral (desktop >= 1024px) / Cabeçalho (mobile e tablet) -->
+    <header class="admin-navegacao" id="admin-navegacao"></header>
+
+    <main class="admin-principal" id="conteudo">
+      <div class="admin-cabecalho-pagina">
+        <div class="admin-cabecalho-textos">
+          <h1 class="admin-titulo">Produtos</h1>
+          <p class="admin-subtitulo">Gerencie os itens, preços, fotos e disponibilidade do cardápio.</p>
+        </div>
+        <button type="button" class="btn btn-primario" id="btn-novo-produto">
+          <span data-icone="mais"></span>
+          <span>Novo produto</span>
+        </button>
+      </div>
+
+      <!-- Barra de ferramentas: busca + filtro de categoria -->
+      <section class="admin-ferramentas" aria-label="Filtros de produtos">
+        <div class="admin-ferramentas-filtros">
+          <div class="admin-busca-wrapper">
+            <span class="admin-busca-icone" data-icone="busca" data-tamanho="18"></span>
+            <input
+              type="search"
+              class="campo"
+              id="campo-busca"
+              placeholder="Buscar produto por nome..."
+              aria-label="Buscar produto por nome"
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="admin-filtro-categoria">
+            <select class="campo" id="filtro-categoria" aria-label="Filtrar por categoria">
+              <option value="">Todas as categorias</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Estado (skeleton / vazio / erro) -->
+      <div id="estado" aria-live="polite"></div>
+
+      <!-- Conteúdo de produtos (tabela no desktop / cards no celular) -->
+      <div id="area-produtos" hidden>
+        <div class="produtos-tabela-wrapper">
+          <table class="produtos-tabela">
+            <thead>
+              <tr>
+                <th scope="col">Produto</th>
+                <th scope="col">Categoria</th>
+                <th scope="col">Preço</th>
+                <th scope="col">Disponível</th>
+                <th scope="col">Ordem</th>
+                <th scope="col">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-produtos-corpo"></tbody>
+          </table>
+        </div>
+
+        <div class="produtos-cards-mobile" id="cards-produtos-mobile"></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Criar / Editar Produto -->
+  <div class="modal-fundo" id="modal-produto-fundo" hidden>
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-produto-titulo"
+    >
+      <div class="admin-modal-cabecalho">
+        <h2 class="admin-modal-titulo" id="modal-produto-titulo">Novo produto</h2>
+        <button
+          type="button"
+          class="btn btn-fantasma btn-icone"
+          id="btn-fechar-modal-produto"
+          aria-label="Fechar janela"
+        >
+          <span data-icone="fechar"></span>
+        </button>
+      </div>
+
+      <form class="admin-form" id="form-produto" novalidate>
+        <div class="admin-alerta-inline" id="erro-form-produto" role="alert" hidden></div>
+
+        <!-- Nome -->
+        <div class="grupo-campo">
+          <div class="admin-campo-topo">
+            <label class="rotulo" for="campo-produto-nome">Nome do produto</label>
+            <span class="admin-contador-caracteres" id="contador-produto-nome">0/60</span>
+          </div>
+          <input
+            type="text"
+            class="campo"
+            id="campo-produto-nome"
+            name="nome"
+            maxlength="60"
+            required
+            autocomplete="off"
+            placeholder="Ex.: Hambúrguer da Casa"
+          >
+        </div>
+
+        <!-- Categoria e Preço -->
+        <div class="admin-form-linha-dupla">
+          <div class="grupo-campo">
+            <label class="rotulo" for="campo-produto-categoria">Categoria</label>
+            <select class="campo" id="campo-produto-categoria" name="categoria_id" required>
+              <option value="">Selecione uma categoria</option>
+            </select>
+          </div>
+
+          <div class="grupo-campo">
+            <label class="rotulo" for="campo-produto-preco">Preço</label>
+            <input
+              type="text"
+              inputmode="numeric"
+              class="campo"
+              id="campo-produto-preco"
+              name="preco"
+              required
+              autocomplete="off"
+              value="R$ 0,00"
+            >
+          </div>
+        </div>
+
+        <!-- Descrição -->
+        <div class="grupo-campo">
+          <div class="admin-campo-topo">
+            <label class="rotulo" for="campo-produto-descricao">Descrição (opcional)</label>
+            <span class="admin-contador-caracteres" id="contador-produto-descricao">0/200</span>
+          </div>
+          <textarea
+            class="campo"
+            id="campo-produto-descricao"
+            name="descricao"
+            rows="3"
+            maxlength="200"
+            placeholder="Ingredientes, acompanhamentos ou tamanho da porção..."
+          ></textarea>
+        </div>
+
+        <!-- Upload de Foto -->
+        <div class="grupo-campo">
+          <span class="rotulo">Foto do produto (opcional)</span>
+          <div class="foto-upload-bloco">
+            <div class="foto-upload-conteudo">
+              <div class="foto-preview-caixa" id="foto-preview-caixa" aria-hidden="true"></div>
+
+              <div class="foto-upload-acoes">
+                <div class="foto-upload-botoes">
+                  <label class="btn btn-secundario" for="campo-produto-foto">
+                    <span data-icone="upload" data-tamanho="18"></span>
+                    <span id="rotulo-escolher-foto">Escolher foto</span>
+                  </label>
+                  <input
+                    type="file"
+                    id="campo-produto-foto"
+                    accept="image/jpeg,image/png,image/webp"
+                    hidden
+                  >
+                  <button
+                    type="button"
+                    class="btn btn-fantasma"
+                    id="btn-remover-foto"
+                    hidden
+                  >
+                    <span data-icone="lixeira" data-tamanho="18"></span>
+                    <span>Remover foto</span>
+                  </button>
+                </div>
+                <span class="foto-upload-dica">
+                  Formatos aceitos: JPG, PNG ou WEBP (máx. 5 MB). Otimizada automaticamente.
+                </span>
+              </div>
+            </div>
+
+            <div class="foto-progresso" id="foto-progresso" hidden>
+              <div class="foto-progresso-barra">
+                <div class="foto-progresso-preenchimento" id="foto-progresso-barra"></div>
+              </div>
+              <span class="foto-progresso-texto" id="foto-progresso-texto">Processando imagem...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Disponível -->
+        <div class="grupo-campo">
+          <label class="interruptor" for="campo-produto-disponivel">
+            <input
+              type="checkbox"
+              class="interruptor-input"
+              id="campo-produto-disponivel"
+              name="disponivel"
+              checked
+            >
+            <span class="interruptor-trilho" aria-hidden="true">
+              <span class="interruptor-bolinha"></span>
+            </span>
+            <span class="interruptor-rotulo">Disponível para pedidos no cardápio</span>
+          </label>
+        </div>
+
+        <div class="admin-modal-rodape">
+          <button type="button" class="btn btn-secundario" id="btn-cancelar-produto">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primario" id="btn-salvar-produto">
+            Salvar produto
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Confirmar Exclusão de Produto -->
+  <div class="modal-fundo" id="modal-excluir-fundo" hidden>
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-excluir-titulo"
+      aria-describedby="modal-excluir-desc"
+    >
+      <div class="admin-modal-cabecalho">
+        <h2 class="admin-modal-titulo" id="modal-excluir-titulo">Excluir produto?</h2>
+        <button
+          type="button"
+          class="btn btn-fantasma btn-icone"
+          id="btn-fechar-modal-excluir"
+          aria-label="Fechar janela"
+        >
+          <span data-icone="fechar"></span>
+        </button>
+      </div>
+
+      <p id="modal-excluir-desc">
+        Tem certeza de que deseja excluir este produto? Esta ação não pode ser desfeita.
+      </p>
+
+      <div class="admin-alerta-inline" id="erro-excluir-produto" role="alert" hidden></div>
+
+      <div class="admin-modal-rodape">
+        <button type="button" class="btn btn-secundario" id="btn-cancelar-excluir">
+          Voltar
+        </button>
+        <button type="button" class="btn btn-perigo" id="btn-confirmar-excluir">
+          Excluir produto
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/marca.js"></script>
+  <script type="module" src="produtos.js"></script>
+</body>
+</html>

@@ -9,6 +9,7 @@ import { supabase } from "../js/supabase.js";
 import { exigirFuncionario, obterSessao, sair } from "../js/auth.js";
 import { icone } from "../js/icones.js";
 import { mostrarToast } from "../js/utils.js";
+import { montarBlocoMarca } from "../js/marca.js";
 
 /* ---------------------------------------------------------------------
    Constantes de configuração do painel
@@ -27,6 +28,22 @@ const INTERVALO_RELOGIO_MS = 60000;
 const DURACAO_DESTAQUE_NOVO_MS = 8000;
 const TITULO_BASE = "Cozinha | Pedido na Mão";
 const FUSO_SP = "America/Sao_Paulo";
+const CHAVE_TEMA_PAINEL = "temaPainel";
+
+// Ícones locais de sol e lua (mesmo estilo SVG 24px, stroke 2)
+const CORPO_SOL =
+  '<circle cx="12" cy="12" r="5"/>' +
+  '<path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>';
+const CORPO_LUA =
+  '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+
+function svgLocal(corpo, tamanho = 20) {
+  return (
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${tamanho}" height="${tamanho}" viewBox="0 0 24 24" ` +
+    'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ' +
+    `aria-hidden="true" focusable="false">${corpo}</svg>`
+  );
+}
 
 /* ---------------------------------------------------------------------
    Atalhos de DOM
@@ -52,6 +69,8 @@ const bannerSom = $("#banner-som");
 const btnBannerSom = $("#btn-banner-som");
 const btnSomTopo = $("#btn-som-topo");
 const btnSomTopoTexto = $("#btn-som-topo-texto");
+const btnTema = $("#btn-tema");
+const marcaCozinha = $("#marca-cozinha");
 const conexaoEl = $("#conexao");
 const conexaoTextoEl = $("#conexao-texto");
 const relogioEl = $("#relogio");
@@ -179,6 +198,41 @@ function atualizarInterfaceSom() {
   btnSomTopo.setAttribute("aria-pressed", String(somAtivo));
   btnSomTopoTexto.textContent = somAtivo ? "Som ligado" : "Som desligado";
 }
+
+function obterTemaAtual() {
+  return document.body.classList.contains("tema-claro") ? "claro" : "suave";
+}
+
+function aplicarTemaPainel(tema, { salvar = false } = {}) {
+  const ehClaro = tema === "claro";
+  document.body.classList.toggle("tema-claro", ehClaro);
+  document.body.classList.toggle("tema-painel", !ehClaro);
+
+  if (btnTema) {
+    btnTema.innerHTML = svgLocal(ehClaro ? CORPO_LUA : CORPO_SOL, 20);
+    btnTema.setAttribute("aria-pressed", String(ehClaro));
+    btnTema.title = ehClaro ? "Mudar para tema suave" : "Mudar para tema claro";
+  }
+
+  if (marcaCozinha) {
+    const novaVariante = ehClaro ? "padrao" : "clara";
+    if (marcaCozinha.getAttribute("data-marca") !== novaVariante) {
+      marcaCozinha.setAttribute("data-marca", novaVariante);
+      montarBlocoMarca(marcaCozinha);
+    }
+  }
+
+  if (salvar) {
+    try {
+      localStorage.setItem(CHAVE_TEMA_PAINEL, ehClaro ? "claro" : "suave");
+    } catch { /* sem acesso ao localStorage */ }
+  }
+}
+
+btnTema?.addEventListener("click", () => {
+  const proximo = obterTemaAtual() === "claro" ? "suave" : "claro";
+  aplicarTemaPainel(proximo, { salvar: true });
+});
 
 function destravarAudio() {
   try {
@@ -939,6 +993,7 @@ async function iniciar() {
     el.innerHTML = icone(el.dataset.icone, Number(el.dataset.tamanho) || 24);
   });
 
+  aplicarTemaPainel(obterTemaAtual());
   atualizarInterfaceSom();
   atualizarRelogio();
 
@@ -976,3 +1031,4 @@ iniciar().catch((erro) => {
   console.error("[cozinha] erro crítico na inicialização:", erro);
   definirConexao(false);
 });
+

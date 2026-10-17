@@ -1,7 +1,7 @@
 /* =====================================================================
-   equipe.css  |  FASE 4  |  Login da equipe (tema escuro sobre --cor-escuro)
+   equipe.css  |  FASE 5.1  |  Login da equipe (tema suave .tema-painel)
    Depende de: tokens.css, base.css, componentes.css.
-   Só variáveis dos tokens; medidas literais apenas estruturais.
+   Usa os tokens --painel-* (sem usar .tema-escuro nem --cor-escuro).
    ===================================================================== */
 
 /* base.css não define [hidden]. */
@@ -9,13 +9,37 @@
   display: none !important;
 }
 
+/* ---------------------------------------------------------------------
+   TEMA PAINEL (local ao login da equipe)
+   Mapeia os tokens padrão para os tokens suaves do painel, garantindo
+   contraste WCAG AA (texto >= 4.5:1 e bordas de campo >= 3:1).
+   --------------------------------------------------------------------- */
+.tema-painel {
+  --cor-fundo: var(--painel-fundo);
+  --cor-superficie: var(--painel-superficie);
+  --cor-borda: var(--painel-borda);
+  --cor-borda-campo: var(--painel-texto-suave);
+  --cor-texto: var(--painel-texto);
+  --cor-texto-suave: var(--painel-texto-suave);
+
+  --cor-primaria-suave: color-mix(in srgb, var(--cor-primaria) 26%, var(--painel-superficie));
+  --cor-destaque-suave: color-mix(in srgb, var(--cor-destaque) 24%, var(--painel-superficie));
+  --cor-primaria-texto: var(--painel-texto);
+
+  --status-cancelado-suave: color-mix(in srgb, var(--status-cancelado) 32%, var(--painel-fundo));
+  --status-cancelado-texto: var(--painel-texto);
+
+  background: var(--painel-fundo);
+  color: var(--painel-texto);
+}
+
 .equipe-login-pagina {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   min-height: 100dvh;
-  background: var(--cor-escuro);
-  color: var(--cor-texto);
+  background: var(--painel-fundo);
+  color: var(--painel-texto);
   overflow-x: hidden;
 }
 
@@ -29,9 +53,12 @@
   padding: var(--esp-6) var(--container-pad) var(--esp-2);
 }
 
-.equipe-topo .marca {
+.equipe-topo .marca,
+.equipe-topo .marca-nome {
   font-size: var(--texto-xl);
-  color: var(--cor-texto-sobre-escuro);
+  color: var(--painel-texto);
+  opacity: 1;
+  filter: none;
 }
 
 .equipe-topo .marca-logo {
@@ -55,22 +82,22 @@
   width: 100%;
   max-width: 420px;
   padding: var(--esp-6);
-  background: var(--cor-superficie);
-  border: 1px solid var(--cor-borda);
+  background: var(--painel-superficie);
+  border: 1px solid var(--painel-borda);
   border-radius: var(--raio-lg);
   box-shadow: var(--sombra-lg);
 }
 
 .equipe-titulo {
   font-size: var(--texto-2xl);
-  color: var(--cor-texto);
+  color: var(--painel-texto);
 }
 
 .equipe-subtitulo {
   margin-top: var(--esp-1);
   margin-bottom: var(--esp-6);
   font-size: var(--texto-sm);
-  color: var(--cor-texto-suave);
+  color: var(--painel-texto-suave);
 }
 
 /* ---------------------------------------------------------------------
@@ -82,17 +109,19 @@
   gap: var(--esp-3);
   margin-bottom: var(--esp-5);
   padding: var(--esp-3) var(--esp-4);
+  border: 1px solid var(--status-cancelado);
   border-radius: var(--raio-md);
   background: var(--status-cancelado-suave);
-  color: var(--status-cancelado-texto);
+  color: var(--painel-texto);
   font-size: var(--texto-sm);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .equipe-aviso-icone {
   display: inline-flex;
   flex-shrink: 0;
   margin-top: 1px;
+  color: var(--cor-destaque);
 }
 
 .equipe-aviso-texto {
@@ -107,6 +136,25 @@
   display: flex;
   flex-direction: column;
   gap: var(--esp-5);
+}
+
+.equipe-form .campo input {
+  background: var(--painel-fundo);
+  color: var(--painel-texto);
+  border-color: var(--painel-borda);
+}
+
+.equipe-form .campo input:hover {
+  border-color: var(--painel-texto-suave);
+}
+
+.equipe-form .campo input:focus-visible {
+  border-color: var(--cor-destaque);
+}
+
+.equipe-form .campo-mensagem-erro {
+  color: var(--cor-destaque);
+  font-weight: 600;
 }
 
 .equipe-form .btn-bloco {
@@ -131,6 +179,7 @@
   inset-block: 0;
   right: var(--esp-1);
   margin-block: auto;
+  color: var(--painel-texto-suave);
 }
 
 /* Botão carregando + desabilitado: mantém o spinner visível */

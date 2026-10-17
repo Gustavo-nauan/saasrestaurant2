@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>Componentes — página de desenvolvimento</title>
-  <link rel="icon" type="image/png" href="../assets/img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap">
@@ -290,10 +289,7 @@
       <h3>Cabeçalho de página (.topo)</h3>
       <div class="topo" style="position: static">
         <div class="container topo-conteudo">
-          <a class="marca" href="#">
-            <img class="marca-logo" src="../assets/img/logo.png" alt="" width="32" height="32" onerror="this.hidden = true">
-            <span class="marca-nome">Pedido na Mão</span>
-          </a>
+          <a class="marca" href="#" data-marca="padrao"></a>
           <div class="topo-acao">
             <button class="btn btn-fantasma btn-icone" aria-label="Notificações"><span data-icone="sino"></span></button>
             <button class="btn btn-fantasma btn-icone" aria-label="Carrinho"><span data-icone="carrinho"></span></button>
@@ -309,9 +305,11 @@
     </div>
   </template>
 
+  <script type="module" src="../js/marca.js"></script>
   <script type="module">
     import { ICONES, icone } from "../js/icones.js";
     import { formatarMoeda, mostrarToast } from "../js/utils.js";
+    import { inicializarMarca } from "../js/marca.js";
 
     /* Listas usadas para gerar a documentação visual. */
     const CORES = [
@@ -371,6 +369,7 @@
         input.id = id;
         input.closest(".campo").querySelector("label").setAttribute("for", id);
       });
+      inicializarMarca(destino);
     }
 
     montarTema(document.getElementById("tema-claro"), "Tema claro");

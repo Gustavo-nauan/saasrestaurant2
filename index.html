@@ -13,9 +13,6 @@
   <meta property="og:title" content="Pedido na Mão — Peça pelo celular. Sem fila.">
   <meta property="og:description" content="Escolha, peça e a gente avisa quando estiver pronto.">
 
-  <!-- Favicon da marca -->
-  <link rel="icon" type="image/png" href="assets/img/logo.png">
-
   <!-- Fontes: preconnect acelera o handshake com o Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,10 +31,7 @@
 
     <section class="inicio-conteudo" aria-labelledby="inicio-titulo">
       <p class="inicio-marca entrada">
-        <span class="marca">
-          <img class="marca-logo" src="assets/img/logo-branca.png" alt="" width="44" height="44" onerror="console.warn('[marca] não foi possível carregar a logo:', this.getAttribute('src')); if (!this.dataset.tentouPadrao) { this.dataset.tentouPadrao = '1'; this.src = 'assets/img/logo.png'; } else { this.hidden = true; }">
-          <span class="marca-nome" data-nome-produto>Pedido na Mão</span>
-        </span>
+        <span class="marca" data-marca="clara"></span>
       </p>
 
       <h1 class="inicio-titulo entrada" id="inicio-titulo">Seu pedido em segundos.</h1>
@@ -53,6 +47,7 @@
     </section>
   </main>
 
+  <script type="module" src="js/marca.js"></script>
   <script type="module" src="js/inicio.js"></script>
 </body>
 </html>

@@ -218,3 +218,4 @@ if (document.activeElement && document.activeElement !== document.body) {
     console.warn("[equipe-login] verificação de sessão ignorada:", erro);
   }
 })();
+

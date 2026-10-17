@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Categorias | Administração</title>
+  <meta name="theme-color" content="#FFF8F0">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap">
+
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/componentes.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-pagina">
+  <div class="admin-layout">
+    <!-- Barra lateral (desktop >= 1024px) / Cabeçalho (mobile e tablet) -->
+    <header class="admin-navegacao" id="admin-navegacao"></header>
+
+    <main class="admin-principal" id="conteudo">
+      <div class="admin-cabecalho-pagina">
+        <div class="admin-cabecalho-textos">
+          <h1 class="admin-titulo">Categorias</h1>
+          <p class="admin-subtitulo">Organize as seções do cardápio e a ordem em que aparecem para o cliente.</p>
+        </div>
+        <button type="button" class="btn btn-primario" id="btn-nova-categoria">
+          <span data-icone="mais"></span>
+          <span>Nova categoria</span>
+        </button>
+      </div>
+
+      <!-- Estado (skeleton / vazio / erro) -->
+      <div id="estado" aria-live="polite"></div>
+
+      <!-- Lista de categorias -->
+      <div class="categorias-lista" id="lista-categorias" hidden></div>
+    </main>
+  </div>
+
+  <!-- Modal Criar / Editar Categoria -->
+  <div class="modal-fundo" id="modal-categoria-fundo" hidden>
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-categoria-titulo"
+    >
+      <div class="admin-modal-cabecalho">
+        <h2 class="admin-modal-titulo" id="modal-categoria-titulo">Nova categoria</h2>
+        <button
+          type="button"
+          class="btn btn-fantasma btn-icone"
+          id="btn-fechar-modal-categoria"
+          aria-label="Fechar janela"
+        >
+          <span data-icone="fechar"></span>
+        </button>
+      </div>
+
+      <form class="admin-form" id="form-categoria" novalidate>
+        <div class="admin-alerta-inline" id="erro-form-categoria" role="alert" hidden></div>
+
+        <div class="grupo-campo">
+          <div class="admin-campo-topo">
+            <label class="rotulo" for="campo-categoria-nome">Nome da categoria</label>
+            <span class="admin-contador-caracteres" id="contador-categoria-nome">0/40</span>
+          </div>
+          <input
+            type="text"
+            class="campo"
+            id="campo-categoria-nome"
+            name="nome"
+            maxlength="40"
+            required
+            autocomplete="off"
+            placeholder="Ex.: Lanches artesanais"
+          >
+        </div>
+
+        <div class="grupo-campo">
+          <label class="interruptor" for="campo-categoria-ativa">
+            <input
+              type="checkbox"
+              class="interruptor-input"
+              id="campo-categoria-ativa"
+              name="ativa"
+              checked
+            >
+            <span class="interruptor-trilho" aria-hidden="true">
+              <span class="interruptor-bolinha"></span>
+            </span>
+            <span class="interruptor-rotulo">Categoria ativa (visível no cardápio)</span>
+          </label>
+        </div>
+
+        <div class="admin-modal-rodape">
+          <button type="button" class="btn btn-secundario" id="btn-cancelar-categoria">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primario" id="btn-salvar-categoria">
+            Salvar categoria
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Confirmar Exclusão de Categoria -->
+  <div class="modal-fundo" id="modal-excluir-fundo" hidden>
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-excluir-titulo"
+      aria-describedby="modal-excluir-desc"
+    >
+      <div class="admin-modal-cabecalho">
+        <h2 class="admin-modal-titulo" id="modal-excluir-titulo">Excluir categoria?</h2>
+        <button
+          type="button"
+          class="btn btn-fantasma btn-icone"
+          id="btn-fechar-modal-excluir"
+          aria-label="Fechar janela"
+        >
+          <span data-icone="fechar"></span>
+        </button>
+      </div>
+
+      <p id="modal-excluir-desc">
+        Tem certeza de que deseja excluir esta categoria? Esta ação não pode ser desfeita.
+      </p>
+
+      <div class="admin-alerta-inline" id="erro-excluir-categoria" role="alert" hidden></div>
+
+      <div class="admin-modal-rodape">
+        <button type="button" class="btn btn-secundario" id="btn-cancelar-excluir">
+          Voltar
+        </button>
+        <button type="button" class="btn btn-perigo" id="btn-confirmar-excluir">
+          Excluir categoria
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/marca.js"></script>
+  <script type="module" src="categorias.js"></script>
+</body>
+</html>

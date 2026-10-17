@@ -157,3 +157,17 @@
   --sombra-md: 0 4px 12px rgba(0, 0, 0, 0.45);
   --sombra-lg: 0 16px 40px rgba(0, 0, 0, 0.60);
 }
+
+/* =====================================================================
+   TOKENS DO PAINEL SUAVE (FASE 5.1)
+   Substituem o quase preto (--cor-escuro) apenas no painel da cozinha
+   e no login da equipe, mantendo conforto visual e alto contraste AA.
+   ===================================================================== */
+:root {
+  --painel-fundo: #3B2A21;
+  --painel-superficie: #4D382C;
+  --painel-superficie-alta: #5A4336;
+  --painel-borda: #7A5E4D;
+  --painel-texto: #FFF8F0;
+  --painel-texto-suave: #E8D8CA;
+}

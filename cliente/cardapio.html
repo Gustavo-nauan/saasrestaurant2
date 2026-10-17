@@ -7,8 +7,6 @@
   <meta name="description" content="Veja o cardápio, escolha seus itens e faça seu pedido pelo celular.">
   <meta name="theme-color" content="#FFF8F0">
 
-  <link rel="icon" type="image/png" href="../assets/img/logo.png">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap">
@@ -21,10 +19,7 @@
 <body class="cardapio-pagina">
   <header class="topo cardapio-topo">
     <div class="container topo-conteudo">
-      <span class="marca" data-nome-produto>
-        <img class="marca-logo" src="../assets/img/logo.png" alt="" width="32" height="32" onerror="console.warn('[marca] não foi possível carregar a logo:', this.getAttribute('src')); this.hidden = true">
-        <span class="marca-nome">Pedido na Mão</span>
-      </span>
+      <span class="marca" data-marca="padrao"></span>
       <div class="topo-acao">
         <span class="pilula-mesa" id="pilula-mesa" hidden>
           <span data-icone="mesa" data-tamanho="16"></span>
@@ -103,6 +98,7 @@
     </div>
   </div>
 
+  <script type="module" src="../js/marca.js"></script>
   <script type="module" src="cardapio.js"></script>
 </body>
 </html>

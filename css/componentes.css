@@ -726,17 +726,38 @@
   flex-shrink: 0;
 }
 
+/* 44px na tela de início e nos logins */
+.inicio-marca .marca-logo,
+.login-topo .marca-logo,
+.equipe-topo .marca-logo {
+  height: var(--alvo-toque);
+  max-height: var(--alvo-toque);
+}
+
 .marca-logo[hidden] {
   display: none !important;
 }
 
 .marca-nome {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
   line-height: 1.15;
+  color: var(--cor-texto);
+  opacity: 1;
+  filter: none;
 }
 
+.marca[data-marca="clara"],
+.marca[data-marca="clara"] .marca-nome,
+.tema-painel .marca,
+.tema-painel .marca-nome,
 .tema-escuro .marca,
-.tema-escuro .marca-nome {
+.tema-escuro .marca-nome,
+.inicio-marca .marca,
+.inicio-marca .marca-nome {
   color: var(--cor-fundo);
+  opacity: 1;
+  filter: none;
 }
 
 .topo-acao {
