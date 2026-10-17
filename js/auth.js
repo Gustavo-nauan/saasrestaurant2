@@ -1,4 +1,4 @@
-﻿/* =====================================================================
+/* =====================================================================
    auth.js  |  FASE 2  |  Autenticação e controle de acesso (ES module)
    Depende de: supabase.js
    Convenção: funções que falham LANÇAM um Error com mensagem JÁ em
@@ -62,36 +62,48 @@ function falhar(erro) {
    Ações
    --------------------------------------------------------------------- */
 
-/** Cria a conta e o perfil em perfis_clientes. */
+/**
+ * Cria a conta. Nome e telefone vão em user_metadata: assim, mesmo quando o
+ * perfil ainda não pode ser gravado (confirmação de e-mail ligada), os dados
+ * não se perdem — garantirPerfil() os usa no primeiro login.
+ * Devolve {sessaoCriada: true} ou {sessaoCriada: false, precisaConfirmarEmail: true}.
+ */
 export async function cadastrarCliente({ nome, email, telefone, senha }) {
   try {
     const { data, error } = await supabase.auth.signUp({
       email: String(email).trim(),
       password: senha,
-      options: { data: { nome: String(nome).trim() } },
+      options: {
+        data: {
+          nome: String(nome).trim(),
+          telefone: telefone ? String(telefone).trim() : null,
+        },
+      },
     });
     if (error) throw error;
 
-    // Sem sessão = o projeto exige confirmação de e-mail. Sem sessão o RLS
-    // não deixa gravar o perfil agora; sinalizamos para a tela orientar.
-    if (!data.session) {
-      return { usuario: data.user, precisaConfirmarEmail: true };
+    // Com confirmação de e-mail ligada, o Supabase NÃO devolve erro para um
+    // e-mail já existente (evita revelar quem tem conta): devolve um usuário
+    // "de mentira" sem identities. Detectamos aqui para avisar corretamente.
+    if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+      throw { code: "user_already_exists", message: "User already registered" };
     }
 
-    const { error: erroPerfil } = await supabase.from("perfis_clientes").upsert({
-      id: data.user.id,
-      nome: String(nome).trim(),
-      telefone: telefone ? String(telefone).trim() : null,
-    });
-    if (erroPerfil) throw erroPerfil;
+    // Sem sessão = confirmação de e-mail ligada. Sem sessão o RLS não deixa
+    // gravar em perfis_clientes (daria erro de permissão): não tentamos.
+    if (!data.session) {
+      return { sessaoCriada: false, precisaConfirmarEmail: true };
+    }
 
-    return { usuario: data.user, precisaConfirmarEmail: false };
+    const perfilOk = await garantirPerfil();
+    return { sessaoCriada: true, perfilOk };
   } catch (erro) {
     falhar(erro);
   }
 }
 
-export async function entrar(email, senha) {
+/** Login sem efeitos colaterais (usado por entrar e entrarFuncionario). */
+async function entrarBase(email, senha) {
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
       email: String(email).trim(),
@@ -101,6 +113,50 @@ export async function entrar(email, senha) {
     return data;
   } catch (erro) {
     falhar(erro);
+  }
+}
+
+/** Login de cliente. Garante a linha em perfis_clientes e devolve {perfilOk}. */
+export async function entrar(email, senha) {
+  await entrarBase(email, senha);
+  const perfilOk = await garantirPerfil();
+  return { perfilOk };
+}
+
+/**
+ * Garante que o usuário logado tenha linha em perfis_clientes.
+ * - Já existe -> true.
+ * - Não existe e há nome no user_metadata -> cria (upsert pelo id) -> true.
+ * - Sem nome no metadata (ex.: conta de funcionário) -> não cria nada -> false.
+ */
+export async function garantirPerfil() {
+  const sessao = await obterSessao();
+  if (!sessao) return false;
+
+  const usuario = sessao.user;
+  try {
+    const { data: existente, error: erroBusca } = await supabase
+      .from("perfis_clientes")
+      .select("id")
+      .eq("id", usuario.id)
+      .maybeSingle();
+    if (erroBusca) throw erroBusca;
+    if (existente) return true;
+
+    const meta = usuario.user_metadata || {};
+    const nome = String(meta.nome ?? "").trim();
+    if (!nome) return false;
+
+    const { error: erroCriar } = await supabase.from("perfis_clientes").upsert({
+      id: usuario.id,
+      nome,
+      telefone: meta.telefone ? String(meta.telefone).trim() : null,
+    });
+    if (erroCriar) throw erroCriar;
+    return true;
+  } catch (erro) {
+    console.error("[auth]", erro);
+    return false;
   }
 }
 
@@ -155,7 +211,7 @@ export async function obterFuncionario() {
  * Devolve {papel, restaurante_id}.
  */
 export async function entrarFuncionario(email, senha) {
-  await entrar(email, senha); // já lança erro traduzido se falhar
+  await entrarBase(email, senha); // já lança erro traduzido se falhar
 
   const funcionario = await obterFuncionario();
   if (!funcionario) {

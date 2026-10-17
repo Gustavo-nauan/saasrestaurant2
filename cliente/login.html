@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrar | Pedido na Mão</title>
+  <meta name="description" content="Entre ou crie sua conta para fazer seu pedido no Pedido na Mão.">
+  <meta name="theme-color" content="#FFF8F0">
+
+  <!-- Favicon inline: evita um pedido extra (e um 404 no console) por /favicon.ico -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='18' r='12' fill='%23E03A1E'/%3E%3Cpath d='M16 8c-2-3-6-3-8-1 3 0 5 1 8 1 3 0 5-1 8-1-2-2-6-2-8 1z' fill='%232E9E5B'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap">
+
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/componentes.css">
+  <link rel="stylesheet" href="../css/cliente-login.css">
+</head>
+<body class="login-pagina">
+  <header class="login-topo">
+    <a class="btn btn-fantasma btn-icone" href="../index.html" id="btn-voltar" aria-label="Voltar para o início">
+      <span data-icone="voltar"></span>
+    </a>
+    <span class="topo-logo" data-nome-produto>Pedido na Mão</span>
+  </header>
+
+  <main class="login-main">
+    <div class="login-cartao">
+      <h1 class="login-titulo">Bem-vindo</h1>
+      <p class="login-apoio">Entre ou crie sua conta para fazer seu pedido.</p>
+
+      <!-- Abas (padrão ARIA tabs): setas esquerda/direita, Home e End navegam -->
+      <div class="chips login-abas" id="abas" role="tablist" aria-label="Escolha entre entrar e criar conta">
+        <button class="chip chip-ativo" type="button" role="tab" id="aba-entrar"
+                aria-selected="true" aria-controls="painel-entrar" tabindex="0">Entrar</button>
+        <button class="chip" type="button" role="tab" id="aba-cadastro"
+                aria-selected="false" aria-controls="painel-cadastro" tabindex="-1">Criar conta</button>
+      </div>
+
+      <!-- Área de erro inline: role="alert" faz o leitor de tela anunciar na hora -->
+      <div class="login-aviso" id="aviso" role="alert" hidden>
+        <span class="login-aviso-icone" data-icone="alerta" data-tamanho="20"></span>
+        <span class="login-aviso-texto" id="aviso-texto"></span>
+      </div>
+
+      <!-- ENTRAR -->
+      <section id="painel-entrar" role="tabpanel" aria-labelledby="aba-entrar">
+        <form class="login-form" id="form-entrar" novalidate>
+          <div class="campo">
+            <label for="entrar-email">E-mail</label>
+            <input type="email" id="entrar-email" name="email" data-validar="email"
+                   autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false"
+                   placeholder="voce@email.com" aria-describedby="entrar-email-erro">
+            <p class="campo-mensagem-erro" id="entrar-email-erro"><span class="msg-icone" data-icone="alerta" data-tamanho="16"></span><span class="msg-texto"></span></p>
+          </div>
+
+          <div class="campo">
+            <label for="entrar-senha">Senha</label>
+            <div class="campo-senha">
+              <input type="password" id="entrar-senha" name="senha" data-validar="senha-login"
+                     autocomplete="current-password" aria-describedby="entrar-senha-erro">
+              <button type="button" class="btn btn-fantasma btn-icone campo-senha-botao"
+                      data-alternar-senha="entrar-senha" aria-label="Mostrar senha" aria-pressed="false"></button>
+            </div>
+            <p class="campo-mensagem-erro" id="entrar-senha-erro"><span class="msg-icone" data-icone="alerta" data-tamanho="16"></span><span class="msg-texto"></span></p>
+          </div>
+
+          <button type="submit" class="btn btn-primario btn-bloco">Entrar</button>
+        </form>
+      </section>
+
+      <!-- CRIAR CONTA -->
+      <section id="painel-cadastro" role="tabpanel" aria-labelledby="aba-cadastro" hidden>
+        <form class="login-form" id="form-cadastro" novalidate>
+          <div class="campo">
+            <label for="cad-nome">Nome</label>
+            <input type="text" id="cad-nome" name="nome" data-validar="nome"
+                   autocomplete="name" placeholder="ex: Gustavo Silva" aria-describedby="cad-nome-erro">
+            <p class="campo-mensagem-erro" id="cad-nome-erro"><span class="msg-icone" data-icone="alerta" data-tamanho="16"></span><span class="msg-texto"></span></p>
+          </div>
+
+          <div class="campo">
+            <label for="cad-telefone">Telefone</label>
+            <input type="tel" id="cad-telefone" name="telefone" data-validar="telefone"
+                   autocomplete="tel-national" inputmode="numeric" placeholder="(00) 00000-0000"
+                   aria-describedby="cad-telefone-erro">
+            <p class="campo-mensagem-erro" id="cad-telefone-erro"><span class="msg-icone" data-icone="alerta" data-tamanho="16"></span><span class="msg-texto"></span></p>
+          </div>
+
+          <div class="campo">
+            <label for="cad-email">E-mail</label>
+            <input type="email" id="cad-email" name="email" data-validar="email"
+                   autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false"
+                   placeholder="voce@email.com" aria-describedby="cad-email-erro">
+            <p class="campo-mensagem-erro" id="cad-email-erro"><span class="msg-icone" data-icone="alerta" data-tamanho="16"></span><span class="msg-texto"></span></p>
+          </div>
+
+          <div class="campo">
+            <label for="cad-senha">Senha</label>
+            <div class="campo-senha">
+              <input type="password" id="cad-senha" name="senha" data-validar="senha"
+                     autocomplete="new-password" aria-describedby="cad-senha-ajuda cad-senha-erro">
+              <button type="button" class="btn btn-fantasma btn-icone campo-senha-botao"
+                      data-alternar-senha="cad-senha" aria-label="Mostrar senha" aria-pressed="false"></button>
+            </div>
+            <div class="forca" id="forca" data-nivel="0">
+              <span class="forca-barra" aria-hidden="true"><span></span><span></span><span></span></span>
+              <span class="forca-texto" id="forca-texto" aria-live="polite"></span>
+            </div>
+            <p class="campo-ajuda" id="cad-senha-ajuda">Mínimo de 6 caracteres.</p>
+            <p class="campo-mensagem-erro" id="cad-senha-erro"><span class="msg-icone" data-icone="alerta" data-tamanho="16"></span><span class="msg-texto"></span></p>
+          </div>
+
+          <button type="submit" class="btn btn-primario btn-bloco">Criar conta</button>
+          <p class="login-nota">Usamos seu telefone apenas para o seu pedido.</p>
+        </form>
+      </section>
+
+      <!-- CONFIRMAÇÃO DE E-MAIL (aparece no lugar dos formulários) -->
+      <section id="painel-confirmacao" class="login-confirmacao" aria-live="polite" hidden>
+        <div class="vazio">
+          <div class="vazio-icone"><span data-icone="check" data-tamanho="32"></span></div>
+          <h2 id="confirmacao-titulo" tabindex="-1">Quase lá!</h2>
+          <p>Enviamos um link de confirmação para o seu e-mail. Depois de confirmar, volte aqui e entre.</p>
+          <button type="button" class="btn btn-primario" id="btn-ir-entrar">Ir para Entrar</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script type="module" src="login.js"></script>
+</body>
+</html>
