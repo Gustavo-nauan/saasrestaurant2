@@ -144,7 +144,7 @@
 .inicio-marca {
   display: inline-flex;
   align-items: center;
-  gap: var(--esp-2);
+  gap: var(--esp-3);
   margin-bottom: var(--esp-6);
   font-family: var(--fonte-titulo);
   font-size: var(--texto-xl);
@@ -153,13 +153,8 @@
   color: var(--cor-texto-sobre-escuro);
 }
 
-.inicio-marca::before {
-  content: "";
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--cor-primaria);
-  box-shadow: 4px -3px 0 -2px var(--cor-sucesso);
+.inicio-marca .marca-logo {
+  height: var(--alvo-toque); /* 44px */
 }
 
 .inicio-titulo {

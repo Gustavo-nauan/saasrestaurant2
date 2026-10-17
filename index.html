@@ -13,8 +13,8 @@
   <meta property="og:title" content="Pedido na Mão — Peça pelo celular. Sem fila.">
   <meta property="og:description" content="Escolha, peça e a gente avisa quando estiver pronto.">
 
-  <!-- Favicon: tomate em SVG inline (data URI), sem arquivo extra -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='18' r='12' fill='%23E03A1E'/%3E%3Cpath d='M16 8c-2-3-6-3-8-1 3 0 5 1 8 1 3 0 5-1 8-1-2-2-6-2-8 1z' fill='%232E9E5B'/%3E%3C/svg%3E">
+  <!-- Favicon da marca -->
+  <link rel="icon" type="image/png" href="assets/img/logo.png">
 
   <!-- Fontes: preconnect acelera o handshake com o Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,7 +33,12 @@
     <div class="inicio-veu" aria-hidden="true"></div>
 
     <section class="inicio-conteudo" aria-labelledby="inicio-titulo">
-      <p class="inicio-marca entrada" data-nome-produto>Pedido na Mão</p>
+      <p class="inicio-marca entrada">
+        <span class="marca">
+          <img class="marca-logo" src="assets/img/logo-branca.png" alt="" width="44" height="44" onerror="if (!this.dataset.tentouPadrao) { this.dataset.tentouPadrao = '1'; this.src = 'assets/img/logo.png'; } else { this.hidden = true; }">
+          <span class="marca-nome" data-nome-produto>Pedido na Mão</span>
+        </span>
+      </p>
 
       <h1 class="inicio-titulo entrada" id="inicio-titulo">Seu pedido em segundos.</h1>
 

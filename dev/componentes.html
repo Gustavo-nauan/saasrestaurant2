@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>Componentes — página de desenvolvimento</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='18' r='12' fill='%23E03A1E'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/png" href="../assets/img/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap">
@@ -290,7 +290,10 @@
       <h3>Cabeçalho de página (.topo)</h3>
       <div class="topo" style="position: static">
         <div class="container topo-conteudo">
-          <a class="topo-logo" href="#">Pedido na Mão</a>
+          <a class="marca" href="#">
+            <img class="marca-logo" src="../assets/img/logo.png" alt="" width="32" height="32" onerror="this.hidden = true">
+            <span class="marca-nome">Pedido na Mão</span>
+          </a>
           <div class="topo-acao">
             <button class="btn btn-fantasma btn-icone" aria-label="Notificações"><span data-icone="sino"></span></button>
             <button class="btn btn-fantasma btn-icone" aria-label="Carrinho"><span data-icone="carrinho"></span></button>

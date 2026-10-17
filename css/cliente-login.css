@@ -19,13 +19,17 @@
 }
 
 /* ---------------------------------------------------------------------
-   TOPO: voltar + wordmark com o ponto tomate (vem de .topo-logo)
+   TOPO: voltar + bloco de marca (.marca) com logo de 44px
    --------------------------------------------------------------------- */
 .login-topo {
   display: flex;
   align-items: center;
   gap: var(--esp-2);
   padding: var(--esp-3) var(--container-pad);
+}
+
+.login-topo .marca-logo {
+  height: var(--alvo-toque); /* 44px */
 }
 
 /* ---------------------------------------------------------------------

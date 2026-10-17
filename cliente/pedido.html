@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Acompanhe seu pedido | Pedido na Mão</title>
+  <meta name="description" content="Acompanhe em tempo real o andamento do seu pedido no Pedido na Mão.">
+  <meta name="theme-color" content="#FFF8F0">
+
+  <link rel="icon" type="image/png" href="../assets/img/logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap">
+
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/componentes.css">
+  <link rel="stylesheet" href="../css/pedido.css">
+</head>
+<body class="pedido-pagina">
+  <header class="topo">
+    <div class="container topo-conteudo">
+      <a class="marca" href="cardapio.html" data-nome-produto>
+        <img class="marca-logo" src="../assets/img/logo.png" alt="" width="32" height="32" onerror="this.hidden = true">
+        <span class="marca-nome">Pedido na Mão</span>
+      </a>
+      <div class="topo-acao">
+        <a class="btn btn-fantasma pedido-btn-novo" href="cardapio.html">Novo pedido</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container pedido-main" id="conteudo">
+    <!-- Carregando / vazio / erro -->
+    <div id="estado"></div>
+
+    <!-- Conteúdo do pedido -->
+    <div class="pedido-layout" id="pedido-layout" hidden>
+      <div class="pedido-coluna-status">
+        <div class="pedido-cabecalho">
+          <div class="pedido-cabecalho-textos">
+            <p class="pedido-restaurante" id="restaurante-nome"></p>
+            <p class="pedido-tempo" id="pedido-tempo"></p>
+          </div>
+          <div class="pedido-conexao" id="conexao" role="status" aria-live="polite">
+            <span class="pedido-conexao-ponto" aria-hidden="true"></span>
+            <span id="conexao-texto">Conectando...</span>
+          </div>
+        </div>
+
+        <!-- Cartão principal em destaque (senha + status + instrução) -->
+        <section class="pedido-destaque" id="cartao-destaque" aria-labelledby="destaque-estado" aria-live="polite">
+          <span class="pedido-destaque-rotulo">Senha</span>
+          <strong class="pedido-destaque-senha" id="destaque-senha"></strong>
+          <h1 class="pedido-destaque-estado" id="destaque-estado"></h1>
+          <p class="pedido-destaque-instrucao" id="destaque-instrucao"></p>
+          <div class="pedido-destaque-acao" id="destaque-acao" hidden>
+            <a class="btn btn-primario" href="cardapio.html">Fazer novo pedido</a>
+          </div>
+        </section>
+
+        <!-- Botão de aviso sonoro e vibração (visível enquanto não estiver pronto/finalizado/cancelado) -->
+        <div class="pedido-alerta-som" id="bloco-som" hidden>
+          <button type="button" class="btn btn-secundario btn-bloco pedido-btn-som" id="btn-som" aria-pressed="false">
+            <span class="pedido-btn-som-icone" data-icone="sino" data-tamanho="20"></span>
+            <span id="btn-som-texto">Ativar aviso sonoro e vibração</span>
+          </button>
+          <p class="pedido-som-estado" id="som-estado" aria-live="polite">Aviso sonoro desativado. Toque para ativar.</p>
+        </div>
+
+        <!-- Linha do tempo de 3 etapas -->
+        <section class="pedido-secao" id="secao-etapas" aria-labelledby="titulo-andamento">
+          <h2 class="pedido-secao-titulo" id="titulo-andamento">Andamento</h2>
+          <ol class="etapas" id="lista-etapas"></ol>
+          <div class="etapas-cancelado" id="aviso-cancelado" hidden>
+            <span class="etapas-cancelado-icone" data-icone="alerta" data-tamanho="22"></span>
+            <p>Este pedido foi cancelado e não seguirá para preparo.</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- Resumo do pedido -->
+      <aside class="pedido-resumo" aria-labelledby="titulo-resumo">
+        <div class="pedido-resumo-topo">
+          <h2 class="pedido-secao-titulo" id="titulo-resumo">Resumo do pedido</h2>
+          <span class="pedido-entrega" id="resumo-entrega"></span>
+        </div>
+
+        <ul class="resumo-itens" id="resumo-itens"></ul>
+
+        <div class="resumo-obs-geral" id="bloco-obs-geral" hidden>
+          <span class="resumo-obs-rotulo">Observação do pedido</span>
+          <p id="resumo-obs-texto"></p>
+        </div>
+
+        <div class="resumo-total-linha">
+          <span>Total</span>
+          <strong id="resumo-total"></strong>
+        </div>
+
+        <!-- Cancelar pedido: SOMENTE enquanto status = recebido -->
+        <div class="pedido-cancelar-area" id="area-cancelar" hidden>
+          <button type="button" class="btn btn-fantasma btn-bloco pedido-btn-cancelar" id="btn-abrir-cancelar">
+            Cancelar pedido
+          </button>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Confirmação de cancelamento (bottom-sheet no celular, modal no tablet/desktop) -->
+  <div class="sobreposicao sobreposicao-sheet" id="modal-cancelar-fundo">
+    <div class="sheet modal-cancelar" id="modal-cancelar" role="dialog" aria-modal="true" aria-labelledby="modal-cancelar-titulo" aria-describedby="modal-cancelar-desc">
+      <div class="modal-topo">
+        <h2 id="modal-cancelar-titulo">Cancelar pedido?</h2>
+        <button type="button" class="btn btn-fantasma btn-icone" id="btn-fechar-modal" aria-label="Fechar">
+          <span data-icone="fechar"></span>
+        </button>
+      </div>
+      <p id="modal-cancelar-desc">Se confirmar, o seu pedido será cancelado imediatamente.</p>
+      <div class="pedido-modal-erro" id="modal-cancelar-erro" role="alert" hidden>
+        <span data-icone="alerta" data-tamanho="18"></span>
+        <span id="modal-cancelar-erro-texto"></span>
+      </div>
+      <div class="modal-acoes">
+        <button type="button" class="btn btn-primario pedido-btn-confirmar-cancelamento" id="btn-confirmar-cancelar">
+          Sim, cancelar pedido
+        </button>
+        <button type="button" class="btn btn-fantasma" id="btn-voltar-modal">
+          Manter pedido
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="pedido.js"></script>
+</body>
+</html>
+

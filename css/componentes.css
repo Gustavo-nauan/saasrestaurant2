@@ -705,6 +705,7 @@
   min-height: 64px;
 }
 
+.marca,
 .topo-logo {
   display: inline-flex;
   align-items: center;
@@ -717,13 +718,19 @@
   text-decoration: none;
 }
 
-.topo-logo::before {
-  content: "";
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--cor-primaria);
-  box-shadow: 4px -3px 0 -2px var(--cor-sucesso);
+.marca-logo {
+  width: auto;
+  height: var(--esp-7); /* 32px nas telas internas */
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.marca-logo[hidden] {
+  display: none !important;
+}
+
+.marca-nome {
+  line-height: 1.15;
 }
 
 .topo-acao {

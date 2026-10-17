@@ -71,7 +71,8 @@ function montarMural() {
 
 function aplicarNomeProduto() {
   document.querySelectorAll("[data-nome-produto]").forEach((el) => {
-    el.textContent = NOME_PRODUTO;
+    const alvo = el.querySelector(".marca-nome") || el;
+    alvo.textContent = NOME_PRODUTO;
   });
 }
 
