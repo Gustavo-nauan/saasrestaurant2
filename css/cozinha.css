@@ -635,10 +635,13 @@ body.modal-aberto {
   .cozinha-main {
     flex: 1;
     min-height: 0;
+    width: 100%;
+    max-width: var(--container-amplo);
+    margin-inline: auto;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--esp-4);
-    padding: var(--esp-4) var(--container-pad);
+    padding: var(--esp-4) var(--container-pad-fluido);
   }
 
   .cozinha-coluna {
@@ -653,3 +656,14 @@ body.modal-aberto {
     overflow-y: auto;
   }
 }
+
+@media (min-width: 1280px) {
+  .cozinha-topo {
+    padding-inline: var(--container-pad-fluido);
+  }
+
+  .cozinha-main {
+    gap: var(--esp-5);
+  }
+}
+

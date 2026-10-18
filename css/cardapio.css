@@ -112,6 +112,8 @@
 
 .cardapio-secao {
   scroll-margin-top: calc(var(--altura-barra) + var(--esp-2));
+  content-visibility: auto;
+  contain-intrinsic-size: auto 340px;
 }
 
 .cardapio-secao + .cardapio-secao {
@@ -120,7 +122,7 @@
 
 .cardapio-secao-titulo {
   margin-bottom: var(--esp-4);
-  font-size: var(--texto-2xl);
+  font-size: clamp(1.375rem, 1.2rem + 0.8vw, 1.875rem);
 }
 
 .cardapio-lista {
@@ -152,6 +154,8 @@
   font: inherit;
   text-align: left;
   overflow-wrap: anywhere;
+  cursor: pointer;
+  transition: color var(--transicao-rapida);
 }
 
 .card-produto-abrir:hover {
@@ -168,12 +172,14 @@
 
 .card-produto-imagem {
   position: relative;
+  aspect-ratio: 1;
 }
 
 .card-produto-imagem.sem-imagem {
   display: grid;
   place-items: center;
   color: var(--cor-primaria-texto);
+  aspect-ratio: 1;
 }
 
 .card-produto-esgotado .card-produto-corpo,
@@ -427,10 +433,17 @@ body.detalhe-aberto {
 }
 
 /* ---------------------------------------------------------------------
-   DESKTOP (>= 1024px): 3 colunas
+   DESKTOP (>= 1024px): container amplo (1440px) e grade fluida auto-fill
    --------------------------------------------------------------------- */
 @media (min-width: 1024px) {
+  .cardapio-pagina .container {
+    max-width: var(--container-amplo);
+    padding-inline: var(--container-pad-fluido);
+  }
+
   .cardapio-lista {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--esp-5);
   }
 }
+

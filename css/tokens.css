@@ -171,3 +171,16 @@
   --painel-texto: #FFF8F0;
   --painel-texto-suave: #E8D8CA;
 }
+
+/* =====================================================================
+   FLUIDEZ (FASE 5.2)
+   Larguras máximas e preenchimentos fluidos para telas largas (1280px a
+   2560px) e curva de transição suave para interações de desktop.
+   ===================================================================== */
+:root {
+  --container-desktop: 1280px;
+  --container-amplo: 1440px;
+  --container-pad-fluido: clamp(1rem, 3.5vw, 3rem);
+  --transicao-fluida: 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+

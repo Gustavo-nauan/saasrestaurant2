@@ -178,6 +178,7 @@ function montarNavegacaoAdmin(paginaAtiva, { nomeFuncionario, nomeRestaurante })
   const itensMenu = [
     { id: "produtos", rotulo: "Produtos", href: "produtos.html", icone: "sacola" },
     { id: "categorias", rotulo: "Categorias", href: "categorias.html", icone: "editar" },
+    { id: "pedidos", rotulo: "Pedidos", href: "pedidos.html", icone: "carrinho" },
     { id: "cozinha", rotulo: "Cozinha", href: "../cozinha/painel.html", icone: "relogio" },
   ];
 

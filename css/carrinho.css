@@ -508,19 +508,20 @@
 }
 
 /* ---------------------------------------------------------------------
-   DESKTOP (>= 1024px): itens à esquerda, resumo fixo à direita
+   DESKTOP (>= 1024px): duas colunas equilibradas (itens + resumo fixo)
    --------------------------------------------------------------------- */
 @media (min-width: 1024px) {
   .carrinho-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 360px;
+    grid-template-columns: minmax(0, 1.35fr) minmax(360px, 0.85fr);
     align-items: start;
-    gap: var(--esp-7);
+    gap: var(--esp-8);
   }
 
   .carrinho-resumo {
     position: sticky;
     top: calc(var(--esp-12) + var(--esp-4));
+    padding: var(--esp-6);
   }
 
   .resumo-botao {
@@ -539,3 +540,4 @@
     bottom: var(--esp-4);
   }
 }
+

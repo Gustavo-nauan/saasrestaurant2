@@ -778,3 +778,68 @@
   align-items: center;
   gap: var(--esp-2);
 }
+
+/* =====================================================================
+   FLUIDEZ (FASE 5.2)
+   View Transitions, rolagem suave, aproveitamento de telas largas
+   (1280px a 2560px), prevenção de saltos de layout e microinterações.
+   ===================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 170ms;
+    animation-timing-function: ease-out;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: var(--container-desktop);
+    padding-inline: var(--container-pad-fluido);
+  }
+}
+
+.btn {
+  transition:
+    background-color var(--transicao-rapida),
+    border-color var(--transicao-rapida),
+    color var(--transicao-rapida),
+    box-shadow var(--transicao-rapida),
+    transform var(--transicao-rapida);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px) scale(0.985);
+}
+
+.card-produto {
+  transition:
+    transform var(--transicao-fluida),
+    box-shadow var(--transicao-fluida),
+    border-color var(--transicao-fluida);
+}
+
+.card-produto:not(.card-produto-esgotado):hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-md);
+}
+
+.card-produto-imagem {
+  aspect-ratio: 1;
+}
+
+.card-produto-imagem img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+

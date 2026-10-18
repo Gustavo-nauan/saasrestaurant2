@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Pedidos | Administração</title>
+  <meta name="theme-color" content="#FFF8F0">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap">
+
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/componentes.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="../css/admin-pedidos.css">
+</head>
+<body class="admin-pagina">
+  <div class="admin-layout">
+    <!-- Barra lateral (desktop >= 1024px) / Cabeçalho (mobile e tablet) -->
+    <header class="admin-navegacao" id="admin-navegacao"></header>
+
+    <main class="admin-principal" id="conteudo">
+      <div class="admin-cabecalho-pagina">
+        <div class="admin-cabecalho-textos">
+          <h1 class="admin-titulo">Pedidos</h1>
+          <p class="admin-subtitulo">Acompanhe o faturamento, indicadores do período e histórico completo de pedidos.</p>
+        </div>
+
+        <div class="pedidos-cabecalho-acoes">
+          <button type="button" class="btn btn-secundario" id="btn-exportar-csv">
+            <span id="icone-exportar-csv"></span>
+            <span id="texto-exportar-csv">Exportar CSV</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filtros: período em chips, datas personalizadas, status, tipo e senha -->
+      <section class="pedidos-filtros" aria-label="Filtros do relatório e de pedidos">
+        <div class="pedidos-filtros-topo">
+          <span class="pedidos-filtro-rotulo" id="rotulo-periodo">Período</span>
+          <div class="pedidos-chips-periodo" role="group" aria-labelledby="rotulo-periodo" id="grupo-chips-periodo">
+            <button type="button" class="chip ativo" data-periodo="hoje" aria-pressed="true">Hoje</button>
+            <button type="button" class="chip" data-periodo="ontem" aria-pressed="false">Ontem</button>
+            <button type="button" class="chip" data-periodo="7d" aria-pressed="false">Últimos 7 dias</button>
+            <button type="button" class="chip" data-periodo="30d" aria-pressed="false">Últimos 30 dias</button>
+            <button type="button" class="chip" data-periodo="personalizado" aria-pressed="false">Personalizado</button>
+          </div>
+
+          <div class="pedidos-datas-personalizadas" id="bloco-datas-personalizadas" hidden>
+            <div class="grupo-campo">
+              <label class="rotulo" for="campo-data-inicio">Data inicial</label>
+              <input type="date" class="campo" id="campo-data-inicio">
+            </div>
+            <div class="grupo-campo">
+              <label class="rotulo" for="campo-data-fim">Data final</label>
+              <input type="date" class="campo" id="campo-data-fim">
+            </div>
+            <button type="button" class="btn btn-primario" id="btn-aplicar-datas">Aplicar</button>
+          </div>
+
+          <div class="admin-alerta-inline" id="erro-filtros" role="alert" hidden></div>
+        </div>
+
+        <div class="pedidos-filtros-grade">
+          <div class="pedidos-filtro-item">
+            <label class="pedidos-filtro-rotulo" for="filtro-status">Status do pedido</label>
+            <select class="campo" id="filtro-status">
+              <option value="todos">Todos os status</option>
+              <option value="finalizado">Finalizados</option>
+              <option value="cancelado">Cancelados</option>
+              <option value="andamento">Em andamento</option>
+            </select>
+          </div>
+
+          <div class="pedidos-filtro-item">
+            <label class="pedidos-filtro-rotulo" for="filtro-tipo">Tipo de atendimento</label>
+            <select class="campo" id="filtro-tipo">
+              <option value="todos">Todos os tipos</option>
+              <option value="retirada_balcao">Retirada no balcão</option>
+              <option value="mesa">Mesa</option>
+            </select>
+          </div>
+
+          <div class="pedidos-filtro-item">
+            <label class="pedidos-filtro-rotulo" for="campo-busca-senha">Buscar por senha</label>
+            <div class="admin-busca-wrapper">
+              <span class="admin-busca-icone" data-icone="busca" data-tamanho="18"></span>
+              <input
+                type="search"
+                inputmode="numeric"
+                class="campo"
+                id="campo-busca-senha"
+                placeholder="Ex.: 42"
+                autocomplete="off"
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Estado geral do relatório (skeleton / erro) -->
+      <div id="estado-relatorio" aria-live="polite"></div>
+
+      <!-- Conteúdo do relatório e lista -->
+      <div id="conteudo-pedidos" class="relatorio-secao" hidden>
+        <!-- Cartões de indicadores (KPIs) -->
+        <section class="relatorio-secao" aria-label="Indicadores do período">
+          <div class="indicadores-grade">
+            <article class="indicador-card indicador-card-destaque">
+              <span class="indicador-rotulo">Faturamento (finalizados)</span>
+              <strong class="indicador-valor" id="kpi-faturamento">R$ 0,00</strong>
+              <span class="indicador-apoio" id="kpi-faturamento-apoio">Pedidos concluídos no período</span>
+            </article>
+
+            <article class="indicador-card">
+              <span class="indicador-rotulo">Pedidos finalizados</span>
+              <strong class="indicador-valor" id="kpi-finalizados-qtd">0</strong>
+              <span class="indicador-apoio">Entregues ao cliente</span>
+            </article>
+
+            <article class="indicador-card">
+              <span class="indicador-rotulo">Ticket médio</span>
+              <strong class="indicador-valor" id="kpi-ticket-medio">R$ 0,00</strong>
+              <span class="indicador-apoio">Média por pedido finalizado</span>
+            </article>
+
+            <article class="indicador-card">
+              <span class="indicador-rotulo">Cancelados</span>
+              <strong class="indicador-valor" id="kpi-cancelados-qtd">0</strong>
+              <span class="indicador-apoio" id="kpi-cancelados-valor">R$ 0,00 em cancelamentos</span>
+            </article>
+
+            <article class="indicador-card">
+              <span class="indicador-rotulo">Em andamento</span>
+              <strong class="indicador-valor" id="kpi-andamento-qtd">0</strong>
+              <span class="indicador-apoio" id="kpi-andamento-valor">R$ 0,00 na fila atual</span>
+            </article>
+          </div>
+
+          <p class="relatorio-nota">
+            Faturamento considera os pedidos finalizados; o sistema ainda não registra pagamentos.
+          </p>
+        </section>
+
+        <!-- Painéis de gráficos: Vendas por dia + Mais vendidos -->
+        <section class="relatorio-paineis" aria-label="Gráficos de desempenho">
+          <article class="relatorio-painel">
+            <div class="relatorio-painel-topo">
+              <h2 class="relatorio-painel-titulo">Vendas por dia</h2>
+              <span class="relatorio-painel-subtitulo">Pedidos finalizados no fuso local</span>
+            </div>
+            <div id="container-grafico-vendas"></div>
+          </article>
+
+          <article class="relatorio-painel">
+            <div class="relatorio-painel-topo">
+              <h2 class="relatorio-painel-titulo">Mais vendidos</h2>
+              <span class="relatorio-painel-subtitulo">Top 10 produtos em pedidos finalizados</span>
+            </div>
+            <div id="container-mais-vendidos"></div>
+          </article>
+        </section>
+
+        <!-- Lista paginada de pedidos do período -->
+        <section class="pedidos-lista-secao" aria-labelledby="titulo-lista-pedidos">
+          <div class="pedidos-lista-topo">
+            <h2 class="pedidos-lista-titulo" id="titulo-lista-pedidos">Pedidos do período</h2>
+            <span class="pedidos-lista-contagem" id="contagem-pedidos"></span>
+          </div>
+
+          <div id="estado-lista-pedidos" aria-live="polite"></div>
+
+          <div id="area-lista-pedidos" hidden>
+            <div class="pedidos-tabela-wrapper">
+              <table class="pedidos-tabela">
+                <thead>
+                  <tr>
+                    <th scope="col">Senha</th>
+                    <th scope="col">Data / Hora</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Itens</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody id="tabela-pedidos-corpo"></tbody>
+              </table>
+            </div>
+
+            <div class="pedidos-cards-mobile" id="cards-pedidos-mobile"></div>
+
+            <div class="pedidos-paginacao" id="paginacao-pedidos" hidden>
+              <button type="button" class="btn btn-secundario" id="btn-carregar-mais">
+                Carregar mais pedidos
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Detalhe do Pedido (somente leitura) -->
+  <div class="modal-fundo" id="modal-pedido-fundo" hidden>
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-pedido-titulo"
+    >
+      <div class="admin-modal-cabecalho">
+        <div class="pedido-card-admin-topo">
+          <h2 class="admin-modal-titulo" id="modal-pedido-titulo">Pedido #00</h2>
+          <span class="badge" id="modal-pedido-status">Finalizado</span>
+        </div>
+        <button
+          type="button"
+          class="btn btn-fantasma btn-icone"
+          id="btn-fechar-modal-pedido"
+          aria-label="Fechar detalhes do pedido"
+        >
+          <span data-icone="fechar"></span>
+        </button>
+      </div>
+
+      <div id="modal-pedido-corpo">
+        <div class="detalhe-pedido-meta">
+          <div class="detalhe-meta-bloco">
+            <span class="detalhe-meta-rotulo">Atendimento</span>
+            <span class="detalhe-meta-valor" id="detalhe-pedido-tipo">-</span>
+          </div>
+          <div class="detalhe-meta-bloco">
+            <span class="detalhe-meta-rotulo">Criado em</span>
+            <span class="detalhe-meta-valor" id="detalhe-pedido-criado">-</span>
+          </div>
+          <div class="detalhe-meta-bloco" id="bloco-detalhe-pronto" hidden>
+            <span class="detalhe-meta-rotulo">Pronto em</span>
+            <span class="detalhe-meta-valor" id="detalhe-pedido-pronto">-</span>
+          </div>
+        </div>
+
+        <ul class="detalhe-itens-lista" id="detalhe-pedido-itens"></ul>
+
+        <div class="detalhe-obs-geral" id="detalhe-pedido-obs" hidden></div>
+
+        <div class="detalhe-total-barra">
+          <span>Total do pedido</span>
+          <span class="detalhe-total-valor" id="detalhe-pedido-total">R$ 0,00</span>
+        </div>
+      </div>
+
+      <div class="admin-modal-rodape">
+        <button type="button" class="btn btn-secundario" id="btn-fechar-rodape-pedido">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/marca.js"></script>
+  <script type="module" src="pedidos.js"></script>
+</body>
+</html>

@@ -36,7 +36,8 @@ function criarTile(numero) {
 
   const img = document.createElement("img");
   img.alt = ""; // decorativa
-  img.loading = "lazy";
+  img.width = 400;
+  img.height = 500;
   img.decoding = "async";
   img.addEventListener("error", () => img.remove(), { once: true });
   img.src = `${PASTA_IMAGENS}/${numeroDuasCasas(numero)}.jpg`;

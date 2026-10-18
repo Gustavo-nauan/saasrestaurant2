@@ -87,10 +87,12 @@
   border-radius: var(--raio-lg);
   box-shadow: var(--sombra-sm);
   min-width: 0;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 176px;
   transition:
-    box-shadow var(--transicao),
-    border-color var(--transicao),
-    transform var(--transicao);
+    box-shadow var(--transicao-fluida),
+    border-color var(--transicao-fluida),
+    transform var(--transicao-fluida);
 }
 
 .card-pedido:hover {
@@ -270,4 +272,12 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+@media (min-width: 1024px) {
+  .historico-grade,
+  .historico-skeleton {
+    gap: var(--esp-5);
+  }
+}
+
 

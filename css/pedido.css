@@ -610,19 +610,21 @@ body.modal-aberto {
 }
 
 /* ---------------------------------------------------------------------
-   DESKTOP (>= 1024px): status à esquerda, resumo à direita
+   DESKTOP (>= 1024px): duas colunas equilibradas (status + resumo)
    --------------------------------------------------------------------- */
 @media (min-width: 1024px) {
   .pedido-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 380px;
+    grid-template-columns: minmax(0, 1.2fr) minmax(380px, 0.9fr);
     align-items: start;
-    gap: var(--esp-7);
+    gap: var(--esp-8);
   }
 
   .pedido-resumo {
     position: sticky;
     top: calc(var(--esp-11) + var(--esp-2));
+    padding: var(--esp-6);
   }
 }
+
 

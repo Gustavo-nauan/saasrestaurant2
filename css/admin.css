@@ -9,6 +9,12 @@
 }
 
 .admin-pagina {
+  --cor-superficie-2: var(--cor-fundo);
+  --raio-pilula: var(--raio-pill);
+  --cor-perigo: var(--cor-erro);
+  --cor-perigo-suave: var(--status-cancelado-suave);
+  --largura-max: var(--container-desktop);
+
   min-height: 100vh;
   min-height: 100dvh;
   background: var(--cor-fundo);
@@ -915,6 +921,14 @@
   }
 
   .admin-principal {
-    padding: var(--esp-7) var(--esp-7) var(--esp-9);
+    max-width: var(--container-desktop);
+    padding: var(--esp-7) var(--container-pad-fluido) var(--esp-9);
+  }
+
+  .categorias-lista {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--esp-4);
   }
 }
+
