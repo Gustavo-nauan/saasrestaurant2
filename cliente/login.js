@@ -80,7 +80,7 @@ function destinoSeguro() {
   if (!bruto) return DESTINO_PADRAO;
 
   const valor = bruto.trim();
-  const formatoOk = /^(cardapio|carrinho|pedido|historico)[a-z0-9._\-/?=&#]*$/i.test(valor);
+  const formatoOk = /^(cardapio|carrinho|pedido|historico)\.html(\?[a-z0-9._\-=&]*)?$/i.test(valor);
   const perigoso =
     valor.includes("//") || valor.includes(":") || valor.includes("\\") ||
     valor.includes("..") || valor.toLowerCase().includes("http");

@@ -180,6 +180,16 @@ function produtosFiltrados() {
   );
 }
 
+function urlImagemSegura(url) {
+  if (!url || typeof url !== "string") return null;
+  try {
+    const parsed = new URL(url.trim());
+    return parsed.protocol === "https:" ? parsed.href : null;
+  } catch {
+    return null;
+  }
+}
+
 function criarImagem(produto, classe) {
   const caixa = criar("div", classe);
   const marcarSemImagem = () => {
@@ -188,13 +198,14 @@ function criarImagem(produto, classe) {
     caixa.append(comIcone(criar("span"), "sacola", 32));
   };
 
-  if (produto.imagem_url) {
+  const urlSegura = urlImagemSegura(produto.imagem_url);
+  if (urlSegura) {
     const img = document.createElement("img");
     img.alt = "";
     img.loading = "lazy";
     img.decoding = "async";
     img.addEventListener("error", marcarSemImagem, { once: true });
-    img.src = produto.imagem_url;
+    img.src = urlSegura;
     caixa.append(img);
   } else {
     marcarSemImagem();
@@ -577,12 +588,13 @@ function abrirDetalhe(produto, origem) {
     $$("img", caixa).forEach((n) => n.remove());
     caixa.append(comIcone(criar("span", "detalhe-vazio"), "sacola", 48));
   };
-  if (produto.imagem_url) {
+  const urlSegura = urlImagemSegura(produto.imagem_url);
+  if (urlSegura) {
     const img = document.createElement("img");
     img.alt = produto.nome;
     img.decoding = "async";
     img.addEventListener("error", marcarSemImagem, { once: true });
-    img.src = produto.imagem_url;
+    img.src = urlSegura;
     caixa.append(img);
   } else {
     marcarSemImagem();

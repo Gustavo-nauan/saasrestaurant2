@@ -307,6 +307,18 @@ async function carregarCatalogo() {
 /* ---------------------------------------------------------------------
    Miniatura de foto com fallback de degradê + ícone SVG
    --------------------------------------------------------------------- */
+function urlImagemSegura(url, { permitirBlob = false } = {}) {
+  if (!url || typeof url !== "string") return null;
+  try {
+    const parsed = new URL(url.trim());
+    if (parsed.protocol === "https:") return parsed.href;
+    if (permitirBlob && parsed.protocol === "blob:") return parsed.href;
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 function criarMiniaturaProduto(prod) {
   const caixa = criar("div", "produto-miniatura");
   const mostrarFallback = () => {
@@ -314,13 +326,13 @@ function criarMiniaturaProduto(prod) {
     comIcone(caixa, "imagem", 22);
   };
 
-  if (prod.imagem_url) {
+  const urlSegura = urlImagemSegura(prod.imagem_url); if (urlSegura) {
     const img = document.createElement("img");
     img.alt = "";
     img.loading = "lazy";
     img.decoding = "async";
     img.addEventListener("error", mostrarFallback, { once: true });
-    img.src = prod.imagem_url;
+    img.src = urlSegura;
     caixa.append(img);
   } else {
     mostrarFallback();
@@ -691,7 +703,7 @@ function limparPreviewTemporario() {
 
 function atualizarPreviewCaixa(urlImagem) {
   fotoPreviewCaixa.replaceChildren();
-  if (urlImagem) {
+  const urlSegura = urlImagemSegura(urlImagem, { permitirBlob: true }); if (urlSegura) {
     const img = document.createElement("img");
     img.alt = "Pré-visualização da foto do produto";
     img.addEventListener(
@@ -702,7 +714,7 @@ function atualizarPreviewCaixa(urlImagem) {
       },
       { once: true }
     );
-    img.src = urlImagem;
+    img.src = urlSegura;
     fotoPreviewCaixa.append(img);
     rotuloEscolherFoto.textContent = "Trocar foto";
     btnRemoverFoto.hidden = false;

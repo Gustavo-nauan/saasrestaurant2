@@ -165,6 +165,16 @@ async function revalidarCarrinho() {
 /* ---------------------------------------------------------------------
    Renderização
    --------------------------------------------------------------------- */
+function urlImagemSegura(url) {
+  if (!url || typeof url !== "string") return null;
+  try {
+    const parsed = new URL(url.trim());
+    return parsed.protocol === "https:" ? parsed.href : null;
+  } catch {
+    return null;
+  }
+}
+
 function criarMiniatura(item) {
   const caixa = criar("div", "item-miniatura");
   const semImagem = () => {
@@ -172,12 +182,13 @@ function criarMiniatura(item) {
     caixa.classList.add("sem-imagem");
     caixa.append(comIcone(criar("span"), "sacola", 28));
   };
-  if (item.imagemUrl) {
+  const urlSegura = urlImagemSegura(item.imagemUrl);
+  if (urlSegura) {
     const img = document.createElement("img");
     img.alt = "";
     img.loading = "lazy";
     img.addEventListener("error", semImagem, { once: true });
-    img.src = item.imagemUrl;
+    img.src = urlSegura;
     caixa.append(img);
   } else {
     semImagem();

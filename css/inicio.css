@@ -1,43 +1,63 @@
 /* =====================================================================
-   inicio.css  |  FASE 5.2  |  Tela de início (mural animado e claro)
+   inicio.css  |  FASE 6.1  |  Tela de início (mural em tela cheia sem caixa)
    Depende de: tokens.css, base.css, componentes.css
    ===================================================================== */
+
+html.inicio-pagina,
+body.inicio-pagina {
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
+  overflow: hidden;
+  background: var(--cor-escuro);
+}
 
 .inicio {
   position: relative;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh;
   min-height: 100vh;
-  min-height: 100dvh;
-  /* Corta o mural que sai da tela: garante ZERO rolagem horizontal. */
+  min-height: 100lvh;
+  /* Corta qualquer excesso do mural e impede barra de rolagem. */
   overflow: hidden;
   background: var(--cor-escuro);
   color: var(--cor-texto-sobre-escuro);
 }
 
 /* ---------------------------------------------------------------------
-   MURAL
-   Estrutura: .mural (escala) > .mural-rotacao (inclina) >
-   .mural-coluna (recorta) > .mural-trilha (anima + filtro cacheado na GPU) > .tile
-   DESEMPENHO: o filter (blur 3px + brilho + saturação) fica na própria
-   .mural-trilha que tem will-change: transform. Assim o navegador rasteriza
-   e desfoca a textura de cada trilha uma única vez na GPU e apenas a
-   desloca com translate3d a cada quadro, sem recalcular blur em 1920/2560px.
+   MURAL EM TELA CHEIA (OVERSIZE)
+   Estrutura: .mural (position: fixed, inset: -15% -> 130% da janela, com
+   blur aplicado no contêiner oversize para que as bordas do desfoque fiquem
+   fora da área visível) > .mural-rotacao (inset: -25% -> 150%, inclinada
+   -8deg sem descobrir cantos em retrato nem paisagem) > .mural-coluna >
+   .mural-trilha (anima com translate3d na GPU) > .tile.
    --------------------------------------------------------------------- */
 .mural {
-  position: absolute;
-  inset: 0;
-  /* scale(1.12) evita bordas vazias nos cantos da rotação. */
-  transform: scale(1.12);
+  position: fixed;
+  inset: -15%;
+  width: 130%;
+  height: 130%;
+  z-index: 0;
+  overflow: hidden;
   pointer-events: none;
+  background: var(--cor-escuro);
+  filter: blur(3px) brightness(1.05) saturate(1.1);
+  transform: scale(1.06) translate3d(0, 0, 0);
+  will-change: transform;
 }
 
 .mural-rotacao {
   position: absolute;
-  /* 140% + deslocamento negativo: mesmo girado -8deg, cobre os cantos. */
-  top: -20%;
-  left: -20%;
-  width: 140%;
-  height: 140%;
+  /* 150% centralizado (-25%) dentro do contêiner já 130%: mesmo girado
+     -8deg em qualquer proporção (360x800 retrato até 2560x1440 paisagem),
+     cobre 100% da janela sem cantos vazios nem faixas sem blur. */
+  inset: -25%;
+  width: 150%;
+  height: 150%;
   display: flex;
   gap: var(--esp-2);
   transform: rotate(-8deg);
@@ -56,26 +76,26 @@
 }
 
 /* Cada coluna começa em um ponto diferente do loop (atraso negativo) e
-   as colunas pares rolam no sentido contrário. */
+   as colunas pares rolam no sentido contrário. Sem margin-top na coluna
+   para nunca criar falha no topo da trilha. */
 .mural-trilha {
   display: flex;
   flex-direction: column;
   width: 100%;
-  filter: blur(3px) brightness(1.05) saturate(1.1);
-  animation: mural-rolar var(--duracao, 72s) linear infinite;
+  animation: mural-rolar var(--duracao, 76s) linear infinite;
   animation-delay: var(--atraso, 0s);
   will-change: transform;
   backface-visibility: hidden;
   transform: translate3d(0, 0, 0);
 }
 
-/* Durações base no celular (3 colunas -> ~18-20 px/s) */
-.mural-coluna:nth-child(1) { --duracao: 68s; --atraso: -10s; }
-.mural-coluna:nth-child(2) { --duracao: 76s; --atraso: -38s; margin-top: var(--esp-10); }
-.mural-coluna:nth-child(3) { --duracao: 62s; --atraso: -24s; }
-.mural-coluna:nth-child(4) { --duracao: 80s; --atraso: -52s; margin-top: var(--esp-10); }
-.mural-coluna:nth-child(5) { --duracao: 72s; --atraso: -8s; }
-.mural-coluna:nth-child(6) { --duracao: 66s; --atraso: -32s; margin-top: var(--esp-10); }
+/* Durações base no celular (3 colunas, 8 tiles duplicados -> velocidade suave e constante) */
+.mural-coluna:nth-child(1) { --duracao: 72s; --atraso: -10s; }
+.mural-coluna:nth-child(2) { --duracao: 80s; --atraso: -38s; }
+.mural-coluna:nth-child(3) { --duracao: 66s; --atraso: -24s; }
+.mural-coluna:nth-child(4) { --duracao: 84s; --atraso: -52s; }
+.mural-coluna:nth-child(5) { --duracao: 76s; --atraso: -8s; }
+.mural-coluna:nth-child(6) { --duracao: 70s; --atraso: -32s; }
 
 .mural-coluna:nth-child(even) .mural-trilha {
   animation-direction: reverse;
@@ -112,29 +132,42 @@
 }
 
 /* ---------------------------------------------------------------------
-   VÉU MAIS CLARO: topo ~15%, meio ~30% e base ~50% da cor escura,
-   deixando as fotos do mural muito mais visíveis e vivas.
-   A proteção mais densa fica restrita à mancha radial atrás do texto.
+   CAMADA ÚNICA DE COBERTURA EM TELA CHEIA (SEM CAIXA LOCAL)
+   Ocupa a janela inteira (position: fixed; inset: 0), sem bordas, atrás
+   do texto e à frente do mural, combinando:
+   (a) degradê vertical leve (topo ~13%, meio ~25%, base ~45% de --cor-escuro)
+   (b) radial-gradient amplo (ellipse 70% 60% at 50% 50%) com paradas suaves
+       que terminam em transparente antes das bordas da janela, eliminando
+       qualquer transição ou retângulo visível atrás do texto.
    --------------------------------------------------------------------- */
 .inicio-veu {
-  position: absolute;
+  position: fixed;
   inset: 0;
+  z-index: var(--z-base);
+  border: 0;
   pointer-events: none;
   background:
+    radial-gradient(
+      ellipse 70% 60% at 50% 50%,
+      color-mix(in srgb, var(--cor-escuro) 58%, transparent) 0%,
+      color-mix(in srgb, var(--cor-escuro) 34%, transparent) 45%,
+      color-mix(in srgb, var(--cor-escuro) 10%, transparent) 74%,
+      transparent 100%
+    ),
     linear-gradient(
       to bottom,
-      color-mix(in srgb, var(--cor-escuro) 15%, transparent) 0%,
-      color-mix(in srgb, var(--cor-escuro) 30%, transparent) 50%,
-      color-mix(in srgb, var(--cor-escuro) 50%, transparent) 100%
+      color-mix(in srgb, var(--cor-escuro) 13%, transparent) 0%,
+      color-mix(in srgb, var(--cor-escuro) 25%, transparent) 50%,
+      color-mix(in srgb, var(--cor-escuro) 45%, transparent) 100%
     );
 }
 
 /* ---------------------------------------------------------------------
-   CONTEÚDO CENTRAL COM PROTEÇÃO RADIAL LOCAL
+   CONTEÚDO CENTRAL (sem fundo, sem pseudo-elemento e sem sombra de caixa)
    --------------------------------------------------------------------- */
 .inicio-conteudo {
   position: relative;
-  z-index: var(--z-base);
+  z-index: calc(var(--z-base) + 1);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -144,22 +177,8 @@
   margin-inline: auto;
   padding: var(--esp-9) var(--container-pad);
   text-align: center;
-}
-
-/* Mancha radial suave e difusa apenas atrás do bloco central de texto:
-   garante contraste >= 4,5:1 no texto sem escurecer o resto da tela. */
-.inicio-conteudo::before {
-  content: "";
-  position: absolute;
-  inset: -10% -8%;
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 70% 60% at 50% 50%,
-    color-mix(in srgb, var(--cor-escuro) 76%, transparent) 0%,
-    color-mix(in srgb, var(--cor-escuro) 54%, transparent) 48%,
-    transparent 100%
-  );
+  background: none;
+  box-shadow: none;
 }
 
 .inicio-marca {
@@ -256,10 +275,10 @@
 @media (min-width: 768px) {
   .mural-coluna:nth-child(4) { display: block; }
 
-  .mural-coluna:nth-child(1) { --duracao: 82s; }
-  .mural-coluna:nth-child(2) { --duracao: 92s; }
-  .mural-coluna:nth-child(3) { --duracao: 76s; }
-  .mural-coluna:nth-child(4) { --duracao: 96s; }
+  .mural-coluna:nth-child(1) { --duracao: 86s; }
+  .mural-coluna:nth-child(2) { --duracao: 96s; }
+  .mural-coluna:nth-child(3) { --duracao: 80s; }
+  .mural-coluna:nth-child(4) { --duracao: 100s; }
 
   .inicio-acoes .btn-grande {
     width: auto;
@@ -274,18 +293,22 @@
 @media (min-width: 1280px) {
   .mural-coluna:nth-child(n + 5) { display: block; }
 
-  .mural-coluna:nth-child(1) { --duracao: 92s; }
-  .mural-coluna:nth-child(2) { --duracao: 104s; }
-  .mural-coluna:nth-child(3) { --duracao: 86s; }
-  .mural-coluna:nth-child(4) { --duracao: 110s; }
-  .mural-coluna:nth-child(5) { --duracao: 98s; }
-  .mural-coluna:nth-child(6) { --duracao: 88s; }
+  .mural-coluna:nth-child(1) { --duracao: 96s; }
+  .mural-coluna:nth-child(2) { --duracao: 108s; }
+  .mural-coluna:nth-child(3) { --duracao: 90s; }
+  .mural-coluna:nth-child(4) { --duracao: 114s; }
+  .mural-coluna:nth-child(5) { --duracao: 102s; }
+  .mural-coluna:nth-child(6) { --duracao: 92s; }
 }
 
 /* Sem movimento: mural parado apenas quando o usuário pede redução de movimento. */
 @media (prefers-reduced-motion: reduce) {
   .mural-trilha {
     animation: none !important;
+  }
+
+  .mural-coluna:nth-child(even) .mural-trilha {
+    transform: translate3d(0, calc(var(--esp-10) * -1), 0);
   }
 
   .entrada {

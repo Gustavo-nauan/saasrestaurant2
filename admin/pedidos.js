@@ -11,18 +11,51 @@
 //   e proteção contra formula injection (=, +, -, @)
 // =====================================================================
 
-import supabase from "../js/supabase.js";
+import { supabase } from "../js/supabase.js";
+import { formatarMoeda, mostrarToast, debounce } from "../js/utils.js";
 import {
+  iniciarAdmin,
+  iconeAdmin,
   criar,
-  formatarMoeda,
-  formatarSenha,
-  mostrarToast,
-  mostrarVazio,
-  mostrarErro,
-  debounce,
-} from "../js/utils.js";
-import { aplicarIcones, comIcone } from "../js/icones.js";
-import { iniciarAdmin, criarControladorModal } from "../js/admin-comum.js";
+  comIcone,
+  criarControladorModal,
+} from "../js/admin-comum.js";
+
+function formatarSenha(numero) {
+  const n = Number.parseInt(String(numero ?? 0), 10);
+  if (!Number.isFinite(n) || n <= 0) return "#00";
+  return `#${String(n).padStart(2, "0")}`;
+}
+
+function mostrarVazio(container, nomeIcone, titulo, texto) {
+  const bloco = criar("div", "admin-estado-bloco");
+  const vazio = criar("div", "vazio");
+  vazio.append(
+    comIcone(criar("div", "vazio-icone"), nomeIcone, 32),
+    criar("h2", "", titulo)
+  );
+  if (texto) vazio.append(criar("p", "", texto));
+  bloco.append(vazio);
+  container.replaceChildren(bloco);
+}
+
+function mostrarErro(container, mensagem, aoTentarNovamente) {
+  const bloco = criar("div", "admin-estado-bloco");
+  const vazio = criar("div", "vazio");
+  vazio.append(
+    comIcone(criar("div", "vazio-icone"), "alerta", 32),
+    criar("h2", "", "Não foi possível carregar"),
+    criar("p", "", mensagem)
+  );
+  if (typeof aoTentarNovamente === "function") {
+    const btn = criar("button", "btn btn-primario", "Tentar de novo");
+    btn.type = "button";
+    btn.addEventListener("click", aoTentarNovamente);
+    vazio.append(btn);
+  }
+  bloco.append(vazio);
+  container.replaceChildren(bloco);
+}
 
 const TAMANHO_PAGINA = 20;
 const LIMITE_EXPORTACAO_CSV = 5000;
@@ -282,23 +315,22 @@ function lerEstadoUrl() {
 }
 
 function atualizarUrlPeriodo() {
-  const url = new URL(window.location.href);
-  url.searchParams.set("periodo", estado.periodo);
+  const params = new URLSearchParams();
+  params.set("periodo", estado.periodo);
   if (estado.periodo === "personalizado") {
-    url.searchParams.set("inicio", estado.dataInicioStr);
-    url.searchParams.set("fim", estado.dataFimStr);
-  } else {
-    url.searchParams.delete("inicio");
-    url.searchParams.delete("fim");
+    params.set("inicio", estado.dataInicioStr);
+    params.set("fim", estado.dataFimStr);
   }
-  window.history.replaceState({}, "", url.toString());
+  window.history.replaceState({}, "", `?${params.toString()}`);
 }
 
 /* ---------------------------------------------------------------------
    Inicialização
    --------------------------------------------------------------------- */
 document.addEventListener("DOMContentLoaded", async () => {
-  aplicarIcones(document);
+  document.querySelectorAll("[data-icone]").forEach((el) => {
+    el.innerHTML = iconeAdmin(el.dataset.icone, Number(el.dataset.tamanho) || 20);
+  });
 
   const iconeCsvEl = document.getElementById("icone-exportar-csv");
   if (iconeCsvEl) {
@@ -308,7 +340,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const contexto = await iniciarAdmin("pedidos");
   if (!contexto) return;
 
-  estado.restauranteId = contexto.restauranteId;
+  estado.restauranteId = contexto.restaurante_id;
   mapearReferencias();
   configurarModalDetalhe();
   lerEstadoUrl();
@@ -833,7 +865,7 @@ function aplicarFiltrosQueryPedidos(query) {
   if (estado.buscaSenha) {
     const numero = Number.parseInt(estado.buscaSenha, 10);
     if (Number.isFinite(numero)) {
-      q = q.eq("numero_senha", numero);
+      q = q.eq("senha", numero);
     }
   }
 
@@ -865,7 +897,7 @@ async function carregarPedidos({ resetar = true, silencioso = false } = {}) {
     let query = supabase
       .from("pedidos")
       .select(
-        "id, numero_senha, status, tipo_entrega, numero_mesa, observacao, subtotal_centavos, total_centavos, criado_em, pronto_em, itens_pedido(id, nome_snapshot, preco_unitario_centavos, quantidade, observacao)",
+        "id, senha, status, tipo_entrega, mesa, observacao, total_centavos, criado_em, pronto_em, itens_pedido(id, nome_snapshot, preco_unitario_centavos, quantidade, observacao)",
         { count: "exact" }
       );
 
@@ -900,7 +932,7 @@ async function carregarPedidos({ resetar = true, silencioso = false } = {}) {
 
 function obterTextoTipoEntrega(pedido) {
   if (pedido.tipo_entrega === "mesa") {
-    return pedido.numero_mesa ? `Mesa ${pedido.numero_mesa}` : "Mesa";
+    return pedido.mesa ? `Mesa ${pedido.mesa}` : "Mesa";
   }
   return "Retirada no balcão";
 }
@@ -945,7 +977,7 @@ function renderizarListaPedidos() {
   const fragCards = document.createDocumentFragment();
 
   estado.pedidos.forEach((pedido) => {
-    const senhaFmt = formatarSenha(pedido.numero_senha);
+    const senhaFmt = formatarSenha(pedido.senha);
     const dataHoraFmt = formatarDataHoraPedido(pedido.criado_em);
     const tipoFmt = obterTextoTipoEntrega(pedido);
     const qtdItens = somarQuantidadeItens(pedido);
@@ -1021,7 +1053,7 @@ function renderizarListaPedidos() {
    Modal de detalhe do pedido (somente leitura)
    --------------------------------------------------------------------- */
 function abrirDetalhePedido(pedido) {
-  const senhaFmt = formatarSenha(pedido.numero_senha);
+  const senhaFmt = formatarSenha(pedido.senha);
   refs.modalPedidoTitulo.textContent = `Pedido ${senhaFmt}`;
 
   const cfgStatus = CONFIG_STATUS[pedido.status] || {
@@ -1142,7 +1174,7 @@ async function buscarPedidosParaCsv() {
     let query = supabase
       .from("pedidos")
       .select(
-        "numero_senha, status, tipo_entrega, numero_mesa, total_centavos, criado_em",
+        "senha, status, tipo_entrega, mesa, total_centavos, criado_em",
         { count: "exact" }
       );
 
@@ -1203,12 +1235,12 @@ async function exportarCsvPeriodo() {
     const linhas = registros.map((p) => {
       const { data, hora } = separarDataHoraCsv(p.criado_em);
       const tipo = p.tipo_entrega === "mesa" ? "Mesa" : "Retirada no balcão";
-      const mesa = p.tipo_entrega === "mesa" && p.numero_mesa ? String(p.numero_mesa) : "";
+      const mesa = p.tipo_entrega === "mesa" && p.mesa ? String(p.mesa) : "";
       const statusRotulo = (CONFIG_STATUS[p.status] || { rotulo: p.status }).rotulo;
       const totalReais = formatarReaisDecimalCsv(Number(p.total_centavos || 0));
 
       return [
-        escaparCelulaCsv(formatarSenha(p.numero_senha)),
+        escaparCelulaCsv(formatarSenha(p.senha)),
         escaparCelulaCsv(data),
         escaparCelulaCsv(hora),
         escaparCelulaCsv(tipo),
@@ -1240,3 +1272,4 @@ async function exportarCsvPeriodo() {
     refs.textoExportarCsv.textContent = "Exportar CSV";
   }
 }
+

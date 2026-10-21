@@ -19,7 +19,7 @@ const PASTA_IMAGENS = "assetes/img/hero";
 // começando em pontos distintos (sem linhas repetidas lado a lado).
 const TOTAL_FOTOS = 12;
 const NUM_COLUNAS = 6;
-const TILES_POR_COLUNA = 6;
+const TILES_POR_COLUNA = 8;
 
 const COLUNAS = Array.from({ length: NUM_COLUNAS }, (_, c) =>
   Array.from({ length: TILES_POR_COLUNA }, (_, i) => ((c * 2 + i * 5) % TOTAL_FOTOS) + 1)

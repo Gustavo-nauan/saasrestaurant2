@@ -30,6 +30,16 @@ function itemValido(i) {
   );
 }
 
+function urlImagemSegura(url) {
+  if (!url || typeof url !== "string") return null;
+  try {
+    const parsed = new URL(url.trim());
+    return parsed.protocol === "https:" ? parsed.href : null;
+  } catch {
+    return null;
+  }
+}
+
 /** Lê os itens; JSON corrompido ou formato inesperado -> recomeça vazio. */
 export function obter(restauranteId) {
   try {
@@ -41,7 +51,7 @@ export function obter(restauranteId) {
       produtoId: i.produtoId,
       nome: String(i.nome ?? ""),
       precoCentavos: i.precoCentavos,
-      imagemUrl: i.imagemUrl ? String(i.imagemUrl) : null,
+      imagemUrl: urlImagemSegura(i.imagemUrl),
       quantidade: i.quantidade,
       observacao: String(i.observacao ?? "").slice(0, OBS_MAXIMA),
     }));
@@ -92,7 +102,7 @@ export function adicionar(restauranteId, produto, quantidade = 1, observacao = "
       produtoId: produto.id,
       nome: produto.nome,
       precoCentavos: produto.preco_centavos,
-      imagemUrl: produto.imagem_url || null,
+      imagemUrl: urlImagemSegura(produto.imagem_url),
       quantidade: qtd,
       observacao: obs,
     });

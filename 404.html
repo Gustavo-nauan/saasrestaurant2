@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#E8421B">
+  <title>Página não encontrada | Pedido na Mão</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/png" href="/assets/img/logo.png">
+
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/componentes.css">
+
+  <style>
+    .pagina-404 {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--esp-6) var(--esp-4);
+      background-color: var(--cor-fundo);
+      color: var(--cor-texto);
+      text-align: center;
+    }
+
+    .cartao-404 {
+      width: 100%;
+      max-width: 440px;
+      background-color: var(--cor-superficie);
+      border: 1px solid var(--cor-borda);
+      border-radius: var(--raio-lg);
+      box-shadow: var(--sombra-md);
+      padding: var(--esp-8) var(--esp-6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--esp-4);
+    }
+
+    .codigo-404 {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--esp-1) var(--esp-3);
+      border-radius: var(--raio-pill);
+      background-color: var(--cor-primaria-clara);
+      color: var(--cor-primaria-escura);
+      font-family: var(--fonte-titulo);
+      font-size: var(--texto-sm);
+      font-weight: var(--peso-bold);
+      letter-spacing: var(--tracking-largo);
+    }
+
+    .titulo-404 {
+      margin: 0;
+      font-family: var(--fonte-titulo);
+      font-size: var(--texto-2xl);
+      font-weight: var(--peso-bold);
+      color: var(--cor-texto);
+      line-height: var(--linha-curta);
+    }
+
+    .descricao-404 {
+      margin: 0;
+      font-size: var(--texto-base);
+      color: var(--cor-texto-secundario);
+      line-height: var(--linha-normal);
+    }
+
+    .acoes-404 {
+      width: 100%;
+      margin-top: var(--esp-2);
+    }
+  </style>
+</head>
+<body>
+  <main class="pagina-404">
+    <section class="cartao-404" aria-labelledby="titulo-404">
+      <a href="/index.html" class="marca" data-marca="padrao" aria-label="Pedido na Mão — Página inicial"></a>
+      <span class="codigo-404">Erro 404</span>
+      <h1 id="titulo-404" class="titulo-404">Página não encontrada</h1>
+      <p class="descricao-404">
+        O endereço acessado não existe ou foi movido. Verifique o link do seu QR Code ou retorne para a página inicial.
+      </p>
+      <div class="acoes-404">
+        <a href="/index.html" class="botao botao-primario botao-bloco">
+          <span>Voltar ao início</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="/js/marca.js"></script>
+</body>
+</html>
